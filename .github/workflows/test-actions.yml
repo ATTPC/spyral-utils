@@ -1,5 +1,5 @@
-name: test-actions
-run-name: ${{ github.actor }} testing out actions
+name: pytest
+run-name: ${{ github.actor }} running pytest
 on: [push]
 jobs:
     test-spyral-utils:
