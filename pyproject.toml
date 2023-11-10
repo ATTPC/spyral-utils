@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "A collection of useful utilities for the Spyral analysis framework"
 authors = [
     {name = "Gordon McCann", email = "mccann@frib.msu.edu"},
+    {name = "Nathan Turi", email = "turi@frib.msu.edu"},
 ]
 dependencies = [
     "numpy>=1.25.2",

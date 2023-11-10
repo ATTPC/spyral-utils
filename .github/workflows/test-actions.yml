@@ -1,0 +1,18 @@
+name: test-actions
+run-name: ${{ github.actor }} testing out actions
+on: [push]
+jobs:
+    test-spyral-utils:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Set up PDM
+              uses: pdm-project/setup-pdm@v3
+              with:
+                python-version: 3.11
+            - name: Install dependencies
+              run: |
+                pdm sync -d -G test
+            - name: Run tests
+              run: |
+                pdm run -v pytest tests
