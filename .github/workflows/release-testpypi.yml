@@ -8,6 +8,7 @@ jobs:
     pypi-publish:
         name: upload release to TestPyPI
         runs-on: ubuntu-latest
+        environment: release-testpypi
         permissions:
             id-token: write
         steps:
