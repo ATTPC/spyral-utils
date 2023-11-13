@@ -1,0 +1,17 @@
+name: release-testpypi
+run-name: ${{ github.actor }} publishing to testpypi
+on:
+    release:
+        types:
+            - prereleased
+jobs:
+    pypi-publish:
+        name: upload release to TestPyPI
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write
+        steps:
+            - uses: actions/checkout@v4
+            - uses: pdm-project/setup-pdm@v3
+            - name: Publish packages to TestPyPI
+              run: pdm publish --repository testpypi
