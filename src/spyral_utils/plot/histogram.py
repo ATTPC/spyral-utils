@@ -88,8 +88,8 @@ class Hist2D:
 
     #returns (integral, mean x, std_dev x, mean y, std_dev y)
     def stats_for_range(self, xrange: tuple[float, float], yrange: tuple[float, float]) -> tuple[float, float, float, float, float] | None:
-        clamped_x_range = clamp_range(xrange[0], (self.x_bins.min(), self.x_bins.max()))
-        clamped_y_range = clamp_range(yrange[1], (self.y_bins.min(), self.y_bins.max()))
+        clamped_x_range = clamp_range(xrange, (self.x_bins.min(), self.x_bins.max()))
+        clamped_y_range = clamp_range(yrange, (self.y_bins.min(), self.y_bins.max()))
         bin_min = self.get_bin((clamped_x_range[0], clamped_y_range[0]))
         bin_max = self.get_bin((clamped_x_range[1], clamped_y_range[1]))
 
