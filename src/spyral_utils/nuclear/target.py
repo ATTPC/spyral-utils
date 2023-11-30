@@ -40,8 +40,8 @@ class GasTarget:
     def __init__(self, target_data: TargetData, nuclear_data: NuclearDataMap):
         self.data = target_data
 
-        self.pretty_string: str = '(Gas)'.join(f'{nuclear_data.get_data(z, a).pretty_iso_symbol}<sub>{s}</sub>' for (z, a, s) in self.data.compound)
-        self.ugly_string: str = '(Gas)'.join(f'{nuclear_data.get_data(z, a).isotopic_symbol}{s}' for (z, a, s) in self.data.compound)
+        self.pretty_string: str = '(Gas)' + ''.join([f'{nuclear_data.get_data(z, a).pretty_iso_symbol}<sub>{s}</sub>' for (z, a, s) in self.data.compound])
+        self.ugly_string: str = '(Gas)' + ''.join([f'{nuclear_data.get_data(z, a).isotopic_symbol}{s}' for (z, a, s) in self.data.compound])
         
         #Construct the target material
         self.material = catima.Material()
@@ -109,8 +109,8 @@ class SolidTarget:
     UG2G: float = 1.0e-6 #convert ug to g
     def __init__(self, target_data: TargetData, nuclear_data: NuclearDataMap):
         self.data = target_data
-        self.pretty_string: str = '(Solid)'.join(f'{nuclear_data.get_data(z, a).pretty_iso_symbol}<sub>{s}</sub>' for (z, a, s) in self.data.compound)
-        self.ugly_string: str = '(Solid)'.join(f'{nuclear_data.get_data(z, a).isotopic_symbol}{s}' for (z, a, s) in self.data.compound)
+        self.pretty_string: str = '(Solid)' + ''.join([f'{nuclear_data.get_data(z, a).pretty_iso_symbol}<sub>{s}</sub>' for (z, a, s) in self.data.compound])
+        self.ugly_string: str = '(Solid)' + ''.join([f'{nuclear_data.get_data(z, a).isotopic_symbol}{s}' for (z, a, s) in self.data.compound])
 
         self.material = catima.Material()
         for z, a, s, in self.data.compound:

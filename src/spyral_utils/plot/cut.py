@@ -71,7 +71,7 @@ class Cut2D:
 def write_cut_json(cut: Cut2D, filepath: Path) -> bool:
     json_str = cut.to_json_str()
     try:
-        with open(filepath, 'a') as output:
+        with open(filepath, 'w') as output:
             output.write(json_str)
             return True
     except OSError as error:

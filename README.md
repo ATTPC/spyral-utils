@@ -1,7 +1,8 @@
 # spyral-utils
 
 ![testing workflow](https://github.com/gwm17/spyral-utils/actions/workflows/test-actions.yml/badge.svg)
-![released workflow](https://github.com/gwm17/spyral-utils/actions/workflows/release-pypi.yml/badge.svg)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/spyral-utils.svg)](https://pypi.python.org/pypi/spyral-utils/)
+[![PyPI license](https://img.shields.io/pypi/l/spyral-utils.svg)](https://pypi.python.org/pypi/spyral-utils/)
 
 spyral-utils is a utility library that contains some of the  core functionality of [Spyral](https://github.com/turinath/Spyral.git). These utilities were found to be useful not just within Spyral but also continuing analysis after using Spyral. Some key utilities include:
 

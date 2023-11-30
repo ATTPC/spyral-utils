@@ -17,6 +17,7 @@ def test_gas_target():
     target = load_target(GAS_TARGET_PATH, nuc_map)
 
     assert isinstance(target, GasTarget)
+    assert target.ugly_string == '(Gas)1H2'
 
     proj_data = nuc_map.get_data(PROJ_Z, PROJ_A)
 
@@ -32,6 +33,7 @@ def test_solid_target():
     target = load_target(SOLID_TARGET_PATH, nuc_map)
 
     assert isinstance(target, SolidTarget)
+    assert target.ugly_string == '(Solid)12C1'
 
     proj_data = nuc_map.get_data(PROJ_Z, PROJ_A)
 
