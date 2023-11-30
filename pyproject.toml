@@ -1,6 +1,6 @@
 [project]
 name = "spyral-utils"
-version = "0.1.1"
+version = "0.1.2"
 description = "A collection of useful utilities for the Spyral analysis framework"
 authors = [
     {name = "Gordon McCann", email = "mccann@frib.msu.edu"},
