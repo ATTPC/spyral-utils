@@ -1,6 +1,12 @@
-from spyral_utils.nuclear.momentum import momentum_4_vec_from_cartesian, momentum_4_vec_from_spherical, get_transform_to_CoM, apply_transform
+from spyral_utils.nuclear.momentum import (
+    momentum_4_vec_from_cartesian,
+    momentum_4_vec_from_spherical,
+    get_transform_to_CoM,
+    apply_transform,
+)
 from math import sin, cos
 import numpy as np
+
 
 def test_momentum_generation():
     p = 3.0
@@ -17,6 +23,7 @@ def test_momentum_generation():
 
     assert np.array_equal(cart_vec, pol_vec)
 
+
 def test_lorentz_transform():
     PRECISION = 1.0e-10
 
@@ -30,6 +37,8 @@ def test_lorentz_transform():
     transform = get_transform_to_CoM(vec)
     boosted = apply_transform(transform, vec)
 
-    assert boosted[0] < PRECISION
-    assert boosted[1] < PRECISION
-    assert boosted[2] < PRECISION
+    print(boosted)
+
+    assert abs(boosted[0]) < PRECISION
+    assert abs(boosted[1]) < PRECISION
+    assert abs(boosted[2]) < PRECISION
