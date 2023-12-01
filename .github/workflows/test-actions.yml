@@ -1,6 +1,10 @@
 name: pytest
 run-name: ${{ github.actor }} running pytest
-on: [push]
+on:
+  push:
+    branches:
+      - '*'
+      - '!gh-pages'
 jobs:
     test-spyral-utils:
         runs-on: ${{ matrix.os }}

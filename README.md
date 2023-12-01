@@ -13,6 +13,8 @@ spyral-utils is a utility library that contains some of the  core functionality 
 
 spyral-utils is still in very early development, so all mileage may vary!
 
+See the [documentation](https://gwm17.github.io/spyral-utils/) for more details.
+
 ## Installation
 
 spyral-utils can be installed using `pip install spyral-utils`
@@ -84,6 +86,12 @@ The JSON description of a 2D-Cut (or 2D-gate) on data is as follows:
 - [numpy](https://numpy.org/)
 - [matplotlib](https://matplotlib.org/)
 - [polars](https://www.pola.rs/)
+
+For documentation we use
+
+- [mkdocs](https://www.mkdocs.org)
+- [mkdocs-material](https://squidfunk.github.io/mkdocs-material/)
+- [mkdocstrings](https://mkdocstrings.github.io/)
 
 ## Authors
 
