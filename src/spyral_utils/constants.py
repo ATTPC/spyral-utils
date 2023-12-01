@@ -2,7 +2,7 @@
 Module of some common constants aliased from scipy to avoid long key strings and with units most
 relevant to AT-TPC data.
 
-Constants
+Attributes
 ---------
 AMU_2_MEV
     converts u to MeV/c^2 (MeV/c^2 / u)
@@ -48,4 +48,4 @@ GAS_CONSTANT: float = (
 
 QBRHO_2_P: float = 1.0e-9 * 10.0 * 100.0 * speed_of_light  # T * m -> MeV/c
 
-C = speed_of_light  # m/s
+C: float = speed_of_light  # m/s

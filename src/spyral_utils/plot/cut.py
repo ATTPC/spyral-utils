@@ -27,10 +27,10 @@ class CutHandler:
     Typically will be used interactively. The onselect method should be passed to the selector object at construction.
     CutHandler can also be used in analysis applications to store cuts.
 
-    Example
-    -------
-    ```[python]
-    from evbutils import CutHandler, Cut2D, write_cut_json
+    An example script:
+
+    ```python
+    from spyral_utils.plot import CutHandler, Cut2D, write_cut_json
     from matplotlib.widgets import PolygonSelector
     import matplotlib.pyplot as plt
 
