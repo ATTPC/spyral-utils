@@ -17,16 +17,7 @@ Histogrammer
 import numpy as np
 from numpy.typing import NDArray
 from dataclasses import dataclass
-from matplotlib.axes import Axes
-from matplotlib.text import Text
-from matplotlib.colors import LogNorm
-from matplotlib.backend_bases import LocationEvent
-from matplotlib.collections import QuadMesh
-import matplotlib.pyplot as plt
-from matplotlib import colormaps
 from math import floor
-
-CMAP = colormaps.get_cmap("viridis").with_extremes(under="white")
 
 
 # Utility functions
@@ -285,10 +276,6 @@ class Histogrammer:
     ----------
     histograms: dict[str, Hist1D | Hist2D]
         the histograms held by the Histogrammer, mapped by name
-    axes: dict[Axes, tuple[str, Text | None]]
-        mapping of mpl Axes to associated histogram names and Text for the stats
-    figures: dict[str, bool]
-        used to see if callbacks have been set for a given figure name
 
     Methods
     -------
@@ -304,28 +291,10 @@ class Histogrammer:
         get a Hist1D by name
     get_hist2d(name: str) -> Hist2D | None
         get a Hist2D by name
-    on_axes_enter_hist1d(event: LocationEvent)
-        handler for when the user mouse enters an axis of a Hist1D
-    on_axes_enter_hist2d(event: LocationEvent)
-        handler for when the user mouse enters an axis of a Hist2D
-    on_axes_enter(event: LocationEvent)
-        matplotlib callback for when the user mouse enters an axis
-    on_axes_leave(event: LocationEvent)
-        matplotlib callback for when the user mouse leaves an axis
-    connect_mpl_callbacks(axis: Axes)
-        setup mpl callbacks for an axis
-    draw_hist1d(name: str, axis: Axes)
-        draw a Hist1D in a matplotlib Axes
-    draw_hist2d(name: str, axis: Axes, log_z: bool = False) -> QuadMesh | None
-        draw a Hist2D in a matplotlib Axes
     """
 
     def __init__(self):
         self.histograms: dict[str, Hist1D | Hist2D] = {}
-        self.axes: dict[Axes, tuple[str, Text | None]] = {}
-        self.figures: dict[
-            str, bool
-        ] = {}  # used to indicate if callbacks have been bound for that figure
 
     def add_hist1d(self, name: str, bins: int, range: tuple[float, float]):
         """Add a Hist1D to the Histogrammer
@@ -485,174 +454,3 @@ class Histogrammer:
             return None
         else:
             return hist
-
-    def on_axes_enter_hist1d(self, event: LocationEvent):
-        """Handler for AxesEnter events on Hist1D
-
-        Parameters
-        ----------
-        event: LocationEvent
-            The event which triggered the callback
-
-        """
-        data = self.axes[event.inaxes]
-        xrange = event.inaxes.get_xbound()
-        yrange = event.inaxes.get_ybound()
-        stats = self.histograms[data[0]].stats_for_range(xrange)
-        if data[1] is not None:
-            data[1].remove()
-
-        draw_x = xrange[1] - 0.25 * np.abs(xrange[0] - xrange[1])
-        draw_y = yrange[1] - 0.25 * np.abs(yrange[0] - yrange[1])
-        self.axes[event.inaxes] = (
-            data[0],
-            event.inaxes.text(
-                draw_x,
-                draw_y,
-                f"Integral: {stats[0]}\nCentroid: {stats[1]:.3f}\nSigma: {stats[2]:.3f}",
-            ),
-        )
-        plt.draw()
-
-    def on_axes_enter_hist2d(self, event: LocationEvent):
-        """Handler for AxesEnter events on Hist2D
-
-        Parameters
-        ----------
-        event: LocationEvent
-            The event which triggered the callback
-
-        """
-        data = self.axes[event.inaxes]
-        xrange = event.inaxes.get_xbound()
-        yrange = event.inaxes.get_ybound()
-        stats = self.histograms[data[0]].stats_for_range(xrange, yrange)
-        if data[1] is not None:
-            data[1].remove()
-
-        draw_x = xrange[1] - 0.25 * np.abs(xrange[0] - xrange[1])
-        draw_y = yrange[1] - 0.25 * np.abs(yrange[0] - yrange[1])
-        self.axes[event.inaxes] = (
-            data[0],
-            event.inaxes.text(
-                draw_x,
-                draw_y,
-                f"Integral: {stats[0]}\nCentroid X: {stats[1]:.3f}\nCentroid Y: {stats[2]:.3f}\nSigma X: {stats[3]:.3f}\nSigma Y: {stats[4]:.3f}",
-                color="black",
-            ),
-        )
-        plt.draw()
-
-    def on_axes_enter(self, event: LocationEvent):
-        """Callback function for AxesEnter events from matplotlib on histograms to display stats
-
-        Parameters
-        ----------
-        event: LocationEvent
-            The event which triggered the callback
-
-        """
-        if event.inaxes not in self.axes:
-            return
-
-        if type(self.histograms[self.axes[event.inaxes][0]]) is Hist1D:
-            self.on_axes_enter_hist1d(event)
-        elif type(self.histograms[self.axes[event.inaxes][0]]) is Hist2D:
-            self.on_axes_enter_hist2d(event)
-
-    def on_axes_leave(self, event: LocationEvent):
-        """Callback function for AxesLeave events from matplotlib on histograms to un-display stats
-
-        Parameters
-        ----------
-        event: LocationEvent
-            The event which triggered the callback
-
-        """
-        if event.inaxes not in self.axes:
-            return
-        data = self.axes[event.inaxes]
-        if data[1] is None:
-            return
-        data[1].remove()
-        self.axes[event.inaxes] = (data[0], None)
-        plt.draw()
-
-    def connect_mpl_callbacks(self, axis: Axes):
-        """Setup callbacks for matplotlib with a given axis
-
-        Parameters
-        ----------
-        axis: Axes
-            The Axes to bind the callbacks to
-
-        """
-        if not hasattr(axis.figure, "_suptitle"):
-            axis.figure.suptitle(f"Figure {len(self.figures)}")
-        elif axis.figure._suptitle in self.figures:
-            return
-
-        self.figures[axis.figure._suptitle] = True
-        axis.figure.canvas.mpl_connect("axes_enter_event", self.on_axes_enter)
-        axis.figure.canvas.mpl_connect("axes_leave_event", self.on_axes_leave)
-
-    def draw_hist1d(self, name: str, axis: Axes):
-        """Draw a Hist1D on a given Axes
-
-        Parameters
-        ----------
-        name: str
-            The name of the histogram to draw
-        axis: Axes
-            The Axes into which the histogram should be drawn
-
-        """
-        if name not in self.histograms:
-            return
-
-        hist = self.histograms[name]
-        if type(hist) is not Hist1D:
-            return
-
-        axis.stairs(hist.counts, hist.bins)
-        self.axes[axis] = (name, None)
-        self.connect_mpl_callbacks(axis)
-
-    def draw_hist2d(
-        self, name: str, axis: Axes, log_z: bool = False
-    ) -> QuadMesh | None:
-        """Draw a Hist2D on a given Axes
-
-        Parameters
-        ----------
-        name: str
-            The name of the histogram to draw
-        axis: Axes
-            The Axes into which the histogram should be drawn
-        log_z: bool
-            Whether or not to logscale the z-axis (color). Default is False.
-
-        Returns
-        -------
-        QuadMesh | None
-            If successfully drawn, returns a QuadMesh of the color scale used to later draw a color bar. Otherwise returns None.
-
-        """
-        if name not in self.histograms:
-            return None
-
-        hist = self.histograms[name]
-        if type(hist) is not Hist2D:
-            return None
-        mesh = None
-        if log_z:
-            mesh = axis.pcolormesh(
-                hist.x_bins, hist.y_bins, hist.counts, cmap=CMAP, norm=LogNorm()
-            )
-        else:
-            mesh = axis.pcolormesh(
-                hist.x_bins, hist.y_bins, hist.counts, cmap=CMAP, vmin=1.0e-6
-            )
-        self.axes[axis] = (name, None)
-        self.connect_mpl_callbacks(axis)
-        return mesh

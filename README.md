@@ -7,7 +7,7 @@
 spyral-utils is a utility library that contains some of the  core functionality of [Spyral](https://github.com/turinath/Spyral.git). These utilities were found to be useful not just within Spyral but also continuing analysis after using Spyral. Some key utilities include:
 
 - Nuclear masses from the AMDC AME 2020 masses
-- Some histogramming and gating/cuting tools using matplotlib
+- Some histogramming and gating/cuting tools that are plotting backend agnostic
 - Basic four vector tools for creating and boosting momentum four vectors using numpy
 - Energy loss analysis for gas and solid targets using pycatima
 
@@ -84,7 +84,7 @@ The JSON description of a 2D-Cut (or 2D-gate) on data is as follows:
 - [AMDC Mass Evaluation](https://www-nds.iaea.org/amdc/): W.J. Huang et al 2021 Chinese Phys. C 45 030002
 - [scipy](https://scipy.org/)
 - [numpy](https://numpy.org/)
-- [matplotlib](https://matplotlib.org/)
+- [shapely](https://shapely.readthedocs.io/)
 - [polars](https://www.pola.rs/)
 
 For documentation we use
