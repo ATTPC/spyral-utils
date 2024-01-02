@@ -205,7 +205,9 @@ class Cut2D:
         data = np.transpose(
             [columns.struct.field(name).to_list() for name in columns.struct.fields]
         )
-        return Series(values=[contains_xy(self.polygon, point) for point in data])
+        return Series(
+            [bool(contains_xy(self.polygon, x=point[0], y=point[1])) for point in data]
+        )
 
     def get_vertices(self) -> np.ndarray:
         """Get the cut vertices
