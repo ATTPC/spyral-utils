@@ -1,11 +1,11 @@
-from spyral_utils.plot import Cut2D, load_cut_json, CutHandler
+from spyral_utils.plot import Cut2D, deserialize_cut, CutHandler
 from pathlib import Path
 
 CUT_JSON_PATH: Path = Path(__file__).parent.resolve() / "cut.json"
 
 
 def test_cut():
-    cut = load_cut_json(CUT_JSON_PATH)
+    cut = deserialize_cut(CUT_JSON_PATH)
     handler = CutHandler()
 
     assert isinstance(cut, Cut2D)

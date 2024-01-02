@@ -3,16 +3,16 @@
 Classes
 -------
 CutHandler
-    Handler to recieve vertices from a matplotlib selector (i.e. PolygonSelector).
+    Handler to recieve vertices from a matplotlib or plotly selection event.
 Cut2D
-    Implementation of 2D cuts as used in many types of graphical analyses
+    Implementation of 2D cuts/gates/selections as used in many types of graphical analyses
 
 Functions
 ---------
-write_cut_json(cut: Cut2D, filepath: Path) -> bool
-    Write the JSON representation of a Cut2D to a file
-load_cut_json(filepath: Path) -> Cut2D | None
-    Deserialize the JSON representation of a Cut2D
+serialize_cut(cut: Cut2D, filepath: Path) -> bool
+    Serialize cut to JSON and write to a file
+deserialize_cut(filepath: Path) -> Cut2D | None
+    Deserialize the JSON representation of a Cut2D from a file
 """
 from polars import Series
 from shapely import Polygon, Point, contains_xy
@@ -23,15 +23,16 @@ from typing import Any
 
 
 class CutHandler:
-    """Handler to recieve vertices from a matplotlib selector (i.e. PolygonSelector).
+    """Handler to recieve vertices from a matplotlib or plotly selector.
 
-    Typically will be used interactively. The onselect method should be passed to the selector object at construction.
-    CutHandler can also be used in analysis applications to store cuts.
+    Typically will be used interactively. The appropriate on_select method should be passed to the selector object or callback for the
+    plotting API used. CutHandler currently supports matplotlib and plotly. CutHandler can also be used in analysis applications to store cuts.
 
-    An example script:
+    An example script for each API:
 
+    Matplotlib
     ```python
-    from spyral_utils.plot import CutHandler, Cut2D, write_cut_json
+    from spyral_utils.plot import CutHandler, Cut2D, serialize_cut
     from matplotlib.widgets import PolygonSelector
     import matplotlib.pyplot as plt
 
@@ -39,15 +40,40 @@ class CutHandler:
     handler = CutHandler()
     selector = PolygonSelector(ax, handler.onselect)
 
-    #plot some data here...
+    # Plot some data here...
 
     plt.show()
 
-    #wait for user to draw a cut and close the window
+    # Wait for user to draw a cut and close the window
 
-    mycut = handler.cuts['cut_0']
-    mycut.name = 'mycut'
-    write_cut_json(mycut, 'mycut.json')
+    my_cut = handler.cuts["cut_0"]
+    my_cut.name = "my_cut"
+    serialize_cut(mycut, "my_cut.json")
+    ```
+
+    Plotly
+    ```python
+    from spyral_utils.plot import CutHandler, Cut2D, serialize_cut
+    import plotly.graph_objects as go
+
+    handler = CutHandler()
+
+    # Do some plotting
+
+    fig = go.Figure()
+    fig.add_trace(...)
+
+    # Bind the callback
+
+    my_plot = fig.data[0]
+    my_plot.on_select(handler.plotly_on_select)
+
+    # Wait for user selection
+
+    my_cut = handler.cuts["cut_0"]
+    my_cut.name = "my_cut"
+    serialize_cut(my_cut, "my_cut.json")
+
     ```
 
     Attributes
@@ -99,11 +125,11 @@ class CutHandler:
 
 
 class Cut2D:
-    """Implementation of 2D cuts as used in many types of graphical analyses
+    """Implementation of 2D cuts/gates/selections as used in many types of graphical analyses
 
-    Uses matplotlib Path objects. Takes in a name (to identify the cut) and a list of points. The Path
+    Uses Shapely Polygon objects. Takes in a name (to identify the cut) and a list of points. The Polygon
     takes the verticies, and can then be used to check if a point(s) is inside of the polygon using the
-    is_*_inside functions. Can be serialized to json format. Can also retreive Nx2 ndarray of vertices
+    contains_* functions. Can be serialized to json format. Can also retreive Nx2 ndarray of vertices
     for plotting after the fact.
 
     Attributes
@@ -210,8 +236,8 @@ class Cut2D:
         )
 
 
-def write_cut_json(cut: Cut2D, filepath: Path) -> bool:
-    """Write the JSON representation of a Cut2D to a file
+def serialize_cut(cut: Cut2D, filepath: Path) -> bool:
+    """Serialize the cut to JSON and write to a file file
 
     Parameters
     ----------
@@ -235,7 +261,7 @@ def write_cut_json(cut: Cut2D, filepath: Path) -> bool:
         return False
 
 
-def load_cut_json(filepath: Path) -> Cut2D | None:
+def deserialize_cut(filepath: Path) -> Cut2D | None:
     """Deserialize the JSON representation of a Cut2D
 
     Parameters

@@ -18,7 +18,7 @@ The required packages for spyral-utils are
 
 - [numpy](https://numpy.org/)
 - [scipy](https://scipy.org/)
-- [matplotlib](https://matplotlib.org/)
+- [shapely](https://shapely.readthedocs.io/)
 - [polars](https://pola.rs/)
 - [pycatima](https://github.com/hrosiak/pycatima)
 - Uses data from the AMDC AME 2020: Meng Wang et al 2021 Chinese Phys. C 45 030003
