@@ -218,8 +218,8 @@ class Cut2D:
         """
         return tuple(self.polygon.exterior.coords)
 
-    def to_json_str(self) -> str:
-        """Get the cut JSON representation
+    def serialize_json(self) -> str:
+        """Serialize to JSON
 
         Returns
         -------
@@ -251,7 +251,7 @@ def serialize_cut(cut: Cut2D, filepath: Path) -> bool:
     bool
         True on success, False on failure
     """
-    json_str = cut.to_json_str()
+    json_str = cut.serialize_json()
     try:
         with open(filepath, "w") as output:
             output.write(json_str)
