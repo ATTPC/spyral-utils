@@ -13,10 +13,10 @@ SolidTarget
 
 Functions
 ---------
-load_target_data(target_path: Path, nuclear_map: NuclearDataMap) -> TargetData | None
-    Load raw target data from JSON. Should never be used directly.
-save_target_data(target_path: Path, target_data: TargetData)
-    Save raw target data to JSON. Should never be used directly.
+deserialize_target_data(target_path: Path, nuclear_map: NuclearDataMap) -> TargetData | None
+    Deserialize raw target data from JSON. Should never be used directly.
+serialize_target_data(target_path: Path, target_data: TargetData)
+    Serialize raw target data to JSON. Should never be used directly.
 load_target(target_path: Path, nuclear_map: NuclearDataMap) -> GasTarget | SolidTarget | None
     Load a target from JSON. This is what should be used to load a target.
 save_target(target_path: Path, target: GasTarget | SolidTarget)
@@ -73,17 +73,13 @@ class TargetData:
             return molar_mass * self.pressure / (GAS_CONSTANT * ROOM_TEMPERATURE)
 
 
-def load_target_data(
-    target_path: Path, nuclear_map: NuclearDataMap
-) -> TargetData | None:
-    """Load the raw target data from a JSON file
+def deserialize_target_data(target_path: Path) -> TargetData | None:
+    """Deserialize raw target data from a JSON file
 
     Parameters
     ----------
     target_path: Path
         Path to JSON file containing target data
-    nuclear_map: NuclearDataMap
-        Mass data; unused
 
     Returns
     -------
@@ -106,8 +102,8 @@ def load_target_data(
             )
 
 
-def save_target_data(target_path: Path, data: TargetData):
-    """Write raw target data to JSON file
+def serialize_target_data(target_path: Path, data: TargetData):
+    """Serialize raw target data to JSON file
 
     Parameters
     ----------
@@ -424,7 +420,7 @@ def load_target(
     GasTarget | SolidTarget | None
         Return a GasTarget or SolidTarget where appropriate. Return None on failure.
     """
-    data = load_target_data(target_path, nuclear_map)
+    data = deserialize_target_data(target_path)
     if data is None:
         return None
     elif data.pressure is None:
@@ -445,4 +441,4 @@ def save_target(target_path: Path, target: GasTarget | SolidTarget):
     target: GasTarget | SolidTarget
         Target to be written
     """
-    save_target_data(target_path, target.data)
+    serialize_target_data(target_path, target.data)

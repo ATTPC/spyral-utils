@@ -3,50 +3,77 @@
 Classes
 -------
 CutHandler
-    Handler to recieve vertices from a matplotlib selector (i.e. PolygonSelector).
+    Handler to recieve vertices from a matplotlib or plotly selection event.
 Cut2D
-    Implementation of 2D cuts as used in many types of graphical analyses
+    Implementation of 2D cuts/gates/selections as used in many types of graphical analyses
 
 Functions
 ---------
-write_cut_json(cut: Cut2D, filepath: Path) -> bool
-    Write the JSON representation of a Cut2D to a file
-load_cut_json(filepath: Path) -> Cut2D | None
-    Deserialize the JSON representation of a Cut2D
+serialize_cut(cut: Cut2D, filepath: Path) -> bool
+    Serialize cut to JSON and write to a file
+deserialize_cut(filepath: Path) -> Cut2D | None
+    Deserialize the JSON representation of a Cut2D from a file
 """
-from matplotlib.path import Path as mplPath
 from polars import Series
+from shapely import Polygon, Point, contains_xy
 import numpy as np
 import json
 from pathlib import Path
+from typing import Any
 
 
 class CutHandler:
-    """Handler to recieve vertices from a matplotlib selector (i.e. PolygonSelector).
+    """Handler to recieve vertices from a matplotlib or plotly selector.
 
-    Typically will be used interactively. The onselect method should be passed to the selector object at construction.
-    CutHandler can also be used in analysis applications to store cuts.
+    Typically will be used interactively. The appropriate on_select method should be passed to the selector object or callback for the
+    plotting API used. CutHandler currently supports matplotlib and plotly. CutHandler can also be used in analysis applications to store cuts.
 
-    An example script:
+    An example script for each API:
 
+    Matplotlib
     ```python
-    from spyral_utils.plot import CutHandler, Cut2D, write_cut_json
+    from spyral_utils.plot import CutHandler, Cut2D, serialize_cut
     from matplotlib.widgets import PolygonSelector
     import matplotlib.pyplot as plt
 
     fig, ax = plt.subplots(1,1)
     handler = CutHandler()
-    selector = PolygonSelector(ax, handler.onselect)
+    selector = PolygonSelector(ax, handler.mpl_on_select)
 
-    #plot some data here...
+    # Plot some data here...
 
     plt.show()
 
-    #wait for user to draw a cut and close the window
+    # Wait for user to draw a cut and close the window
 
-    mycut = handler.cuts['cut_0']
-    mycut.name = 'mycut'
-    write_cut_json(mycut, 'mycut.json')
+    my_cut = handler.cuts["cut_0"]
+    my_cut.name = "my_cut"
+    serialize_cut(mycut, "my_cut.json")
+    ```
+
+    Plotly
+    ```python
+    from spyral_utils.plot import CutHandler, Cut2D, serialize_cut
+    import plotly.graph_objects as go
+
+    handler = CutHandler()
+
+    # Do some plotting
+
+    fig = go.Figure()
+    fig.add_trace(...)
+
+    # Bind the callback
+
+    my_plot = fig.data[0]
+    my_plot.on_select(handler.plotly_on_select)
+
+    # Wait for user selection
+
+    my_cut = handler.cuts["cut_0"]
+    my_cut.name = "my_cut"
+    serialize_cut(my_cut, "my_cut.json")
+
     ```
 
     Attributes
@@ -56,24 +83,53 @@ class CutHandler:
 
     Methods
     -------
-    onselect(verticies: list[tuple[float, float]])
+    mpl_on_select(verticies: list[tuple[float, float]])
         recieve a matplotlib polygon and create a Cut2D from it
+    plotly_on_select(trace: Any, points: Any, selector: Any)
+        recieve a plotly selection event and create a Cut2D from it
     """
 
     def __init__(self):
         self.cuts: dict[str, Cut2D] = {}
 
-    def onselect(self, vertices: list[tuple[float, float]]):
+    def mpl_on_select(self, vertices: list[tuple[float, float]]):
+        """Callback for use with matplotlib
+
+        Parameters
+        ----------
+        vertices: list[tuple[float, float]]
+            polygon vertices
+        """
         cut_default_name = f"cut_{len(self.cuts)}"
         self.cuts[cut_default_name] = Cut2D(cut_default_name, vertices)
 
+    def plotly_on_select(self, trace: Any, points: Any, selector: Any):
+        """Callback for use with plotly
+
+        Parameters
+        ----------
+        trace: Any
+            The plotly trace from which the event originated (not relevant)
+        points:
+            A plotly Points object containing the data indicies within the selection (not relevant)
+        selector:
+            The selector object (either BoxSelector or LassoSelector)
+        """
+        if len(selector.xs) < 2:
+            return
+
+        cut_default_name = f"cut_{len(self.cuts)}"
+        self.cuts[cut_default_name] = Cut2D(
+            cut_default_name, list(zip(selector.xs, selector.ys))
+        )
+
 
 class Cut2D:
-    """Implementation of 2D cuts as used in many types of graphical analyses
+    """Implementation of 2D cuts/gates/selections as used in many types of graphical analyses
 
-    Uses matplotlib Path objects. Takes in a name (to identify the cut) and a list of points. The Path
+    Uses Shapely Polygon objects. Takes in a name (to identify the cut) and a list of points. The Polygon
     takes the verticies, and can then be used to check if a point(s) is inside of the polygon using the
-    is_*_inside functions. Can be serialized to json format. Can also retreive Nx2 ndarray of vertices
+    contains_* functions. Can be serialized to json format. Can also retreive Nx2 ndarray of vertices
     for plotting after the fact.
 
     Attributes
@@ -98,9 +154,7 @@ class Cut2D:
     """
 
     def __init__(self, name: str, vertices: list[tuple[float, float]]):
-        self.path: mplPath = mplPath(
-            vertices, closed=False
-        )  # Has to be false, sometimes without this, the algorithm does some weird jumping between the first and last point
+        self.polygon: Polygon = Polygon(vertices)
         self.name = name
 
     def is_point_inside(self, x: float, y: float) -> bool:
@@ -118,7 +172,7 @@ class Cut2D:
         bool
             true if inside, false if outside
         """
-        return self.path.contains_point((x, y))
+        return self.polygon.contains(Point(x, y))
 
     def is_arr_inside(self, points: list[tuple[float, float]]) -> list[bool]:
         """Which of the points in this list are in the cut
@@ -133,7 +187,7 @@ class Cut2D:
         list[bool]
             List of results of checking each point
         """
-        return self.path.contains_points(points)
+        return [contains_xy(self.polygon, point) for point in points]
 
     def is_cols_inside(self, columns: Series) -> Series:
         """Which of the points in this Series are in the cut
@@ -151,21 +205,21 @@ class Cut2D:
         data = np.transpose(
             [columns.struct.field(name).to_list() for name in columns.struct.fields]
         )
-        return Series(values=self.path.contains_points(data))
+        return Series(values=[contains_xy(point) for point in data])
 
     def get_vertices(self) -> np.ndarray:
         """Get the cut vertices
 
         Returns
         -------
-        ndarray
+        list[tuple]
             the vertices
 
         """
-        return self.path.vertices
+        return tuple(self.polygon.exterior.coords)
 
-    def to_json_str(self) -> str:
-        """Get the cut JSON representation
+    def serialize_json(self) -> str:
+        """Serialize to JSON
 
         Returns
         -------
@@ -176,14 +230,14 @@ class Cut2D:
             self,
             default=lambda obj: {
                 "name": obj.name,
-                "vertices": obj.path.vertices.tolist(),
+                "vertices": tuple(obj.polygon.exterior.coords),
             },
             indent=4,
         )
 
 
-def write_cut_json(cut: Cut2D, filepath: Path) -> bool:
-    """Write the JSON representation of a Cut2D to a file
+def serialize_cut(cut: Cut2D, filepath: Path) -> bool:
+    """Serialize the cut to JSON and write to a file file
 
     Parameters
     ----------
@@ -197,7 +251,7 @@ def write_cut_json(cut: Cut2D, filepath: Path) -> bool:
     bool
         True on success, False on failure
     """
-    json_str = cut.to_json_str()
+    json_str = cut.serialize_json()
     try:
         with open(filepath, "w") as output:
             output.write(json_str)
@@ -207,7 +261,7 @@ def write_cut_json(cut: Cut2D, filepath: Path) -> bool:
         return False
 
 
-def load_cut_json(filepath: Path) -> Cut2D | None:
+def deserialize_cut(filepath: Path) -> Cut2D | None:
     """Deserialize the JSON representation of a Cut2D
 
     Parameters
