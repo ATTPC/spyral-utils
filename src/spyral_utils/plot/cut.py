@@ -38,7 +38,7 @@ class CutHandler:
 
     fig, ax = plt.subplots(1,1)
     handler = CutHandler()
-    selector = PolygonSelector(ax, handler.onselect)
+    selector = PolygonSelector(ax, handler.mpl_on_select)
 
     # Plot some data here...
 
