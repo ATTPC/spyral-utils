@@ -2,7 +2,7 @@
 
 Exports
 -------
-Cut2D, CutHandler, load_cut_json, write_cut_json
+Cut2D, CutHandler, serialize_cut, deserialize_cut
 Hist1D, Hist2D, Histogrammer
 """
 
