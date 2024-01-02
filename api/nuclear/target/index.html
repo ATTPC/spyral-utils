@@ -606,18 +606,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#spyral_utils.nuclear.target.load_target" class="md-nav__link">
+  <a href="#spyral_utils.nuclear.target.deserialize_target_data" class="md-nav__link">
     <span class="md-ellipsis">
-      load_target()
+      deserialize_target_data()
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#spyral_utils.nuclear.target.load_target_data" class="md-nav__link">
+  <a href="#spyral_utils.nuclear.target.load_target" class="md-nav__link">
     <span class="md-ellipsis">
-      load_target_data()
+      load_target()
     </span>
   </a>
   
@@ -633,9 +633,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#spyral_utils.nuclear.target.save_target_data" class="md-nav__link">
+  <a href="#spyral_utils.nuclear.target.serialize_target_data" class="md-nav__link">
     <span class="md-ellipsis">
-      save_target_data()
+      serialize_target_data()
     </span>
   </a>
   
@@ -957,18 +957,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#spyral_utils.nuclear.target.load_target" class="md-nav__link">
+  <a href="#spyral_utils.nuclear.target.deserialize_target_data" class="md-nav__link">
     <span class="md-ellipsis">
-      load_target()
+      deserialize_target_data()
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#spyral_utils.nuclear.target.load_target_data" class="md-nav__link">
+  <a href="#spyral_utils.nuclear.target.load_target" class="md-nav__link">
     <span class="md-ellipsis">
-      load_target_data()
+      load_target()
     </span>
   </a>
   
@@ -984,9 +984,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#spyral_utils.nuclear.target.save_target_data" class="md-nav__link">
+  <a href="#spyral_utils.nuclear.target.serialize_target_data" class="md-nav__link">
     <span class="md-ellipsis">
-      save_target_data()
+      serialize_target_data()
     </span>
   </a>
   
@@ -1074,18 +1074,18 @@
     </thead>
     <tbody>
           <tr>
-            <td><code>load_target_data</code></td>
+            <td><code>deserialize_target_data</code></td>
             <td>
               <div class="doc-md-description">
-                <p>Load raw target data from JSON. Should never be used directly.</p>
+                <p>Deserialize raw target data from JSON. Should never be used directly.</p>
               </div>
             </td>
           </tr>
           <tr>
-            <td><code>save_target_data</code></td>
+            <td><code>serialize_target_data</code></td>
             <td>
               <div class="doc-md-description">
-                <p>Save raw target data to JSON. Should never be used directly.</p>
+                <p>Serialize raw target data to JSON. Should never be used directly.</p>
               </div>
             </td>
           </tr>
@@ -1248,7 +1248,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
             <details class="quote">
               <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">131</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
 <span class="normal">132</span>
 <span class="normal">133</span>
 <span class="normal">134</span>
@@ -1380,11 +1384,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">260</span>
 <span class="normal">261</span>
 <span class="normal">262</span>
-<span class="normal">263</span>
-<span class="normal">264</span>
-<span class="normal">265</span>
-<span class="normal">266</span>
-<span class="normal">267</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">GasTarget</span><span class="p">:</span>
+<span class="normal">263</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">GasTarget</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An AT-TPC gas target</span>
 
 <span class="sd">    Gas target for which energy loss can be calculated using pycatima. Can perform several types of</span>
@@ -1622,7 +1622,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
           <details class="quote">
             <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">212</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
 <span class="normal">213</span>
 <span class="normal">214</span>
 <span class="normal">215</span>
@@ -1639,11 +1643,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">226</span>
 <span class="normal">227</span>
 <span class="normal">228</span>
-<span class="normal">229</span>
-<span class="normal">230</span>
-<span class="normal">231</span>
-<span class="normal">232</span>
-<span class="normal">233</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_angular_straggling</span><span class="p">(</span>
+<span class="normal">229</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_angular_straggling</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">projectile_data</span><span class="p">:</span> <span class="n">NucleusData</span><span class="p">,</span> <span class="n">projectile_energy</span><span class="p">:</span> <span class="nb">float</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the angular straggling for a projectile</span>
@@ -1757,7 +1757,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
           <details class="quote">
             <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">192</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
 <span class="normal">193</span>
 <span class="normal">194</span>
 <span class="normal">195</span>
@@ -1771,11 +1775,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">203</span>
 <span class="normal">204</span>
 <span class="normal">205</span>
-<span class="normal">206</span>
-<span class="normal">207</span>
-<span class="normal">208</span>
-<span class="normal">209</span>
-<span class="normal">210</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_dedx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projectile_data</span><span class="p">:</span> <span class="n">NucleusData</span><span class="p">,</span> <span class="n">projectile_energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">206</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_dedx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projectile_data</span><span class="p">:</span> <span class="n">NucleusData</span><span class="p">,</span> <span class="n">projectile_energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the stopping power of the target for a projectile</span>
 
 <span class="sd">    Parameters</span>
@@ -1900,7 +1900,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
           <details class="quote">
             <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">235</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
 <span class="normal">236</span>
 <span class="normal">237</span>
 <span class="normal">238</span>
@@ -1928,11 +1932,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">260</span>
 <span class="normal">261</span>
 <span class="normal">262</span>
-<span class="normal">263</span>
-<span class="normal">264</span>
-<span class="normal">265</span>
-<span class="normal">266</span>
-<span class="normal">267</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_energy_loss</span><span class="p">(</span>
+<span class="normal">263</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_energy_loss</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">projectile_data</span><span class="p">:</span> <span class="n">NucleusData</span><span class="p">,</span>
     <span class="n">projectile_energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -2097,7 +2097,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
             <details class="quote">
               <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">270</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
 <span class="normal">271</span>
 <span class="normal">272</span>
 <span class="normal">273</span>
@@ -2228,11 +2232,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">398</span>
 <span class="normal">399</span>
 <span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SolidTarget</span><span class="p">:</span>
+<span class="normal">401</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">SolidTarget</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;An AT-TPC gas target</span>
 
 <span class="sd">    Gas target for which energy loss can be calculated using pycatima. Can perform several types of</span>
@@ -2469,7 +2469,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
           <details class="quote">
             <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">347</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
 <span class="normal">348</span>
 <span class="normal">349</span>
 <span class="normal">350</span>
@@ -2486,11 +2490,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">361</span>
 <span class="normal">362</span>
 <span class="normal">363</span>
-<span class="normal">364</span>
-<span class="normal">365</span>
-<span class="normal">366</span>
-<span class="normal">367</span>
-<span class="normal">368</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_angular_straggling</span><span class="p">(</span>
+<span class="normal">364</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_angular_straggling</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span> <span class="n">projectile_data</span><span class="p">:</span> <span class="n">NucleusData</span><span class="p">,</span> <span class="n">projectile_energy</span><span class="p">:</span> <span class="nb">float</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the angular straggling for a projectile</span>
@@ -2604,7 +2604,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
           <details class="quote">
             <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">327</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span>
+<span class="normal">327</span>
 <span class="normal">328</span>
 <span class="normal">329</span>
 <span class="normal">330</span>
@@ -2618,11 +2622,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">338</span>
 <span class="normal">339</span>
 <span class="normal">340</span>
-<span class="normal">341</span>
-<span class="normal">342</span>
-<span class="normal">343</span>
-<span class="normal">344</span>
-<span class="normal">345</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_dedx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projectile_data</span><span class="p">:</span> <span class="n">NucleusData</span><span class="p">,</span> <span class="n">projectile_energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="normal">341</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_dedx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">projectile_data</span><span class="p">:</span> <span class="n">NucleusData</span><span class="p">,</span> <span class="n">projectile_energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the stopping power of the target for a projectile</span>
 
 <span class="sd">    Parameters</span>
@@ -2748,7 +2748,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
           <details class="quote">
             <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">370</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
 <span class="normal">371</span>
 <span class="normal">372</span>
 <span class="normal">373</span>
@@ -2779,11 +2783,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">398</span>
 <span class="normal">399</span>
 <span class="normal">400</span>
-<span class="normal">401</span>
-<span class="normal">402</span>
-<span class="normal">403</span>
-<span class="normal">404</span>
-<span class="normal">405</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_energy_loss</span><span class="p">(</span>
+<span class="normal">401</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_energy_loss</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">projectile_data</span><span class="p">:</span> <span class="n">NucleusData</span><span class="p">,</span>
     <span class="n">projectile_energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
@@ -3108,6 +3108,137 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
 
 
+<h2 id="spyral_utils.nuclear.target.deserialize_target_data" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">deserialize_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Deserialize raw target data from a JSON file</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>target_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to JSON file containing target data</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="spyral_utils.nuclear.target.TargetData" href="#spyral_utils.nuclear.target.TargetData">TargetData</a> | None</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the data loaded successfully, returns a TargetData. Otherwise returns None.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+          <details class="quote">
+            <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">deserialize_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TargetData</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deserialize raw target data from a JSON file</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target_path: Path</span>
+<span class="sd">        Path to JSON file containing target data</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    TargetData | None</span>
+<span class="sd">        If the data loaded successfully, returns a TargetData. Otherwise returns None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">target_file</span><span class="p">:</span>
+        <span class="n">json_data</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">target_file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="s2">&quot;compound&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
+            <span class="ow">or</span> <span class="s2">&quot;pressure(Torr)&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
+            <span class="ow">or</span> <span class="s2">&quot;thickness(ug/cm^2)&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">TargetData</span><span class="p">(</span>
+                <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;compound&quot;</span><span class="p">],</span>
+                <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;pressure(Torr)&quot;</span><span class="p">],</span>
+                <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;thickness(ug/cm^2)&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+
 <h2 id="spyral_utils.nuclear.target.load_target" class="doc doc-heading">
           <code class="highlight language-python"><span class="n">load_target</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="n">nuclear_map</span><span class="p">)</span></code>
 
@@ -3189,7 +3320,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
           <details class="quote">
             <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">408</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">404</span>
+<span class="normal">405</span>
+<span class="normal">406</span>
+<span class="normal">407</span>
+<span class="normal">408</span>
 <span class="normal">409</span>
 <span class="normal">410</span>
 <span class="normal">411</span>
@@ -3210,11 +3345,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">426</span>
 <span class="normal">427</span>
 <span class="normal">428</span>
-<span class="normal">429</span>
-<span class="normal">430</span>
-<span class="normal">431</span>
-<span class="normal">432</span>
-<span class="normal">433</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">load_target</span><span class="p">(</span>
+<span class="normal">429</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">load_target</span><span class="p">(</span>
     <span class="n">target_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">nuclear_map</span><span class="p">:</span> <span class="n">NuclearDataMap</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GasTarget</span> <span class="o">|</span> <span class="n">SolidTarget</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a target from a JSON file</span>
@@ -3233,166 +3364,13 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="sd">    GasTarget | SolidTarget | None</span>
 <span class="sd">        Return a GasTarget or SolidTarget where appropriate. Return None on failure.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">load_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="n">nuclear_map</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">deserialize_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="k">elif</span> <span class="n">data</span><span class="o">.</span><span class="n">pressure</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">SolidTarget</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nuclear_map</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">GasTarget</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nuclear_map</span><span class="p">)</span>
-</code></pre></div></td></tr></table></div>
-          </details>
-  </div>
-
-</div>
-
-
-<div class="doc doc-object doc-function">
-
-
-
-
-<h2 id="spyral_utils.nuclear.target.load_target_data" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">load_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="n">nuclear_map</span><span class="p">)</span></code>
-
-</h2>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Load the raw target data from a JSON file</p>
-
-
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>target_path</code></td>
-          <td>
-                <code><span title="pathlib.Path">Path</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Path to JSON file containing target data</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>nuclear_map</code></td>
-          <td>
-                <code><a class="autorefs autorefs-internal" title="spyral_utils.nuclear.nuclear_map.NuclearDataMap" href="../nuclear_map/#spyral_utils.nuclear.nuclear_map.NuclearDataMap">NuclearDataMap</a></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Mass data; unused</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code><a class="autorefs autorefs-internal" title="spyral_utils.nuclear.target.TargetData" href="#spyral_utils.nuclear.target.TargetData">TargetData</a> | None</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>If the data loaded successfully, returns a TargetData. Otherwise returns None.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-          <details class="quote">
-            <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 76</span>
-<span class="normal"> 77</span>
-<span class="normal"> 78</span>
-<span class="normal"> 79</span>
-<span class="normal"> 80</span>
-<span class="normal"> 81</span>
-<span class="normal"> 82</span>
-<span class="normal"> 83</span>
-<span class="normal"> 84</span>
-<span class="normal"> 85</span>
-<span class="normal"> 86</span>
-<span class="normal"> 87</span>
-<span class="normal"> 88</span>
-<span class="normal"> 89</span>
-<span class="normal"> 90</span>
-<span class="normal"> 91</span>
-<span class="normal"> 92</span>
-<span class="normal"> 93</span>
-<span class="normal"> 94</span>
-<span class="normal"> 95</span>
-<span class="normal"> 96</span>
-<span class="normal"> 97</span>
-<span class="normal"> 98</span>
-<span class="normal"> 99</span>
-<span class="normal">100</span>
-<span class="normal">101</span>
-<span class="normal">102</span>
-<span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
-<span class="normal">106</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">load_target_data</span><span class="p">(</span>
-    <span class="n">target_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">nuclear_map</span><span class="p">:</span> <span class="n">NuclearDataMap</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TargetData</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the raw target data from a JSON file</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    target_path: Path</span>
-<span class="sd">        Path to JSON file containing target data</span>
-<span class="sd">    nuclear_map: NuclearDataMap</span>
-<span class="sd">        Mass data; unused</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    TargetData | None</span>
-<span class="sd">        If the data loaded successfully, returns a TargetData. Otherwise returns None.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">target_file</span><span class="p">:</span>
-        <span class="n">json_data</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">target_file</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="s2">&quot;compound&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
-            <span class="ow">or</span> <span class="s2">&quot;pressure(Torr)&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
-            <span class="ow">or</span> <span class="s2">&quot;thickness(ug/cm^2)&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
-        <span class="p">):</span>
-            <span class="k">return</span> <span class="kc">None</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">TargetData</span><span class="p">(</span>
-                <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;compound&quot;</span><span class="p">],</span>
-                <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;pressure(Torr)&quot;</span><span class="p">],</span>
-                <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;thickness(ug/cm^2)&quot;</span><span class="p">],</span>
-            <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -3462,7 +3440,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
           <details class="quote">
             <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">436</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">432</span>
+<span class="normal">433</span>
+<span class="normal">434</span>
+<span class="normal">435</span>
+<span class="normal">436</span>
 <span class="normal">437</span>
 <span class="normal">438</span>
 <span class="normal">439</span>
@@ -3470,11 +3452,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">441</span>
 <span class="normal">442</span>
 <span class="normal">443</span>
-<span class="normal">444</span>
-<span class="normal">445</span>
-<span class="normal">446</span>
-<span class="normal">447</span>
-<span class="normal">448</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">save_target</span><span class="p">(</span><span class="n">target_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">GasTarget</span> <span class="o">|</span> <span class="n">SolidTarget</span><span class="p">):</span>
+<span class="normal">444</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">save_target</span><span class="p">(</span><span class="n">target_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">target</span><span class="p">:</span> <span class="n">GasTarget</span> <span class="o">|</span> <span class="n">SolidTarget</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Write a target to a JSON file</span>
 
 <span class="sd">    Create the JSON data, and write to disk.</span>
@@ -3486,7 +3464,7 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="sd">    target: GasTarget | SolidTarget</span>
 <span class="sd">        Target to be written</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">save_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">serialize_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
@@ -3499,15 +3477,15 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
 
 
-<h2 id="spyral_utils.nuclear.target.save_target_data" class="doc doc-heading">
-          <code class="highlight language-python"><span class="n">save_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></code>
+<h2 id="spyral_utils.nuclear.target.serialize_target_data" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">serialize_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></code>
 
 </h2>
 
 
   <div class="doc doc-contents ">
   
-      <p>Write raw target data to JSON file</p>
+      <p>Serialize raw target data to JSON file</p>
 
 
 
@@ -3555,7 +3533,11 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 
           <details class="quote">
             <summary>Source code in <code>src/spyral_utils/nuclear/target.py</code></summary>
-            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">109</span>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
 <span class="normal">110</span>
 <span class="normal">111</span>
 <span class="normal">112</span>
@@ -3570,12 +3552,8 @@ energy loss calculations (straggling, dEdx, energy lost, etc.)</p>
 <span class="normal">121</span>
 <span class="normal">122</span>
 <span class="normal">123</span>
-<span class="normal">124</span>
-<span class="normal">125</span>
-<span class="normal">126</span>
-<span class="normal">127</span>
-<span class="normal">128</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">save_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">TargetData</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Write raw target data to JSON file</span>
+<span class="normal">124</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">serialize_target_data</span><span class="p">(</span><span class="n">target_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">TargetData</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Serialize raw target data to JSON file</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
