@@ -4,8 +4,8 @@
 [metadata]
 groups = ["default", "test"]
 strategy = ["cross_platform"]
-lock_version = "4.4.1"
-content_hash = "sha256:91a6a3d5a44e0705e5d3831b4d2782dba141b4ac42baef56eb2e3b378f75f5cb"
+lock_version = "4.4"
+content_hash = "sha256:0f3cd38d6386d7299547e8ff325b6afece67b166a52f82c9c7dc8a07eb62dd2a"
 
 [[package]]
 name = "babel"
@@ -727,6 +727,20 @@ summary = "HTTP library with thread-safe connection pooling, file post, and more
 files = [
     {file = "urllib3-2.1.0-py3-none-any.whl", hash = "sha256:55901e917a5896a349ff771be919f8bd99aff50b79fe58fec595eb37bbc56bb3"},
     {file = "urllib3-2.1.0.tar.gz", hash = "sha256:df7aa8afb0148fa78488e7899b2c59b5f4ffcfa82e6c54ccb9dd37c1d7b52d54"},
+]
+
+[[package]]
+name = "vector"
+version = "1.3.0"
+requires_python = ">=3.8"
+summary = "Vector classes and utilities"
+dependencies = [
+    "numpy>=1.13.3",
+    "packaging>=19",
+]
+files = [
+    {file = "vector-1.3.0-py3-none-any.whl", hash = "sha256:cdd13fff7a48f63d87f847a9288a04fe47fe0a6d77f0f255a06b218165bc4542"},
+    {file = "vector-1.3.0.tar.gz", hash = "sha256:9d0eedcd854e99c174a249668716e01f8c39709f9cc2e262d62862721ec3ef27"},
 ]
 
 [[package]]

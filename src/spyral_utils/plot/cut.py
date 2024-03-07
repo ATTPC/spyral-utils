@@ -14,6 +14,7 @@ serialize_cut(cut: Cut2D, filepath: Path) -> bool
 deserialize_cut(filepath: Path) -> Cut2D | None
     Deserialize the JSON representation of a Cut2D from a file
 """
+
 from polars import Series
 from shapely import Polygon, Point, contains_xy
 import numpy as np
@@ -149,7 +150,7 @@ class Cut2D:
         Check if a set of polars Columns are inside the cut
     get_vertices() -> ndarray
         Get the cut vertices
-    to_json_str() -> str
+    serialize_json() -> str
         Get the JSON representation of the cut
     """
 

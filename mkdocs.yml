@@ -11,9 +11,9 @@ nav:
     - Constants: api/constants.md
     - Nuclear:
       - Module Overview: api/nuclear/index.md
-      - Momentum Module: api/nuclear/momentum.md
       - Nuclear Mass Module: api/nuclear/nuclear_map.md
       - Target Material Module: api/nuclear/target.md
+      - Particle ID Module: api/nuclear/particle_id.md
     - Plotting:
       - Module Overview: api/plot/index.md
       - Histogram Module: api/plot/histogram.md
