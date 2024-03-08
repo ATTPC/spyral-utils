@@ -8,8 +8,8 @@ spyral-utils is a utility library that contains some of the  core functionality 
 
 - Nuclear masses from the AMDC AME 2020 masses
 - Some histogramming and gating/cuting tools that are plotting backend agnostic
-- Basic four vector tools for creating and boosting momentum four vectors using numpy
 - Energy loss analysis for gas and solid targets using pycatima
+- 4-vector analysis through the vector package
 
 spyral-utils is still in very early development, so all mileage may vary!
 
@@ -78,6 +78,27 @@ The JSON description of a 2D-Cut (or 2D-gate) on data is as follows:
 
 `name` is a identifier given for that particular cut. `verticies` is a list of `[x,y]` coordinates which define the polygon. Note that the polygon must be closed (the final vertex must be the same as the first vertex).
 
+### Particle ID
+
+The JSON description of a particle ID gate is as follows:
+
+```[json]
+{
+    "name": "test_cut",
+    "vertices": [
+        [0.0, 0.0],
+        [1.0, 0.0],
+        [1.0, 1.0],
+        [0.0, 1.0],
+        [0.0, 0.0]
+    ],
+    "Z": 6,
+    "A": 12
+}
+```
+
+The `name` and `vertices` fields are the same as those used by a 2D-Cut. The particle ID has the additional data `Z` and `A` which are the element and mass number of the associated nucleus.
+
 ## References
 
 - [CAtima](https://github.com/hrosiak/catima)/[pycatima](https://github.com/hrosiak/pycatima)
@@ -86,12 +107,17 @@ The JSON description of a 2D-Cut (or 2D-gate) on data is as follows:
 - [numpy](https://numpy.org/)
 - [shapely](https://shapely.readthedocs.io/)
 - [polars](https://www.pola.rs/)
+- [vector](https://vector.readthedocs.io/)
 
 For documentation we use
 
 - [mkdocs](https://www.mkdocs.org)
 - [mkdocs-material](https://squidfunk.github.io/mkdocs-material/)
 - [mkdocstrings](https://mkdocstrings.github.io/)
+
+For testing we use
+
+- [pytest](https://docs.pytest.org/)
 
 ## Authors
 
