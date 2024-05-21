@@ -15,9 +15,11 @@ generate_nucleus_id(z: int, a: int) -> int:
     get a unqiue nucleus id
 """
 
-from dataclasses import dataclass
 from ..constants import AMU_2_MEV, ELECTRON_MASS_U
+
+from dataclasses import dataclass
 from pathlib import Path
+from importlib.resources import files, as_file
 
 DATA_PATH: Path = Path(__file__).parent.resolve() / "amdc_2020.txt"
 
@@ -121,7 +123,9 @@ class NuclearDataMap:
     def __init__(self):
         self.map = {}
 
-        with open(DATA_PATH) as data_file:
+        data_handle = files("spyral_utils.nuclear").joinpath("amdc_2020.txt")
+        with as_file(data_handle) as data_path:
+            data_file = open(data_path, "r")
             data_file.readline()  # Header
             for line in data_file:
                 entries = line.split()
@@ -136,6 +140,7 @@ class NuclearDataMap:
                 data.isotopic_symbol = f"{data.A}{entries[2]}"
                 data.pretty_iso_symbol = f"<sup>{data.A}</sup>{entries[2]}"
                 self.map[generate_nucleus_id(data.Z, data.A)] = data
+            data_file.close()
 
     def get_data(self, z: int, a: int) -> NucleusData:
         """retrieve the mass data for a given nucleus

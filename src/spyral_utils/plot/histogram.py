@@ -11,7 +11,7 @@ Hist1D
 Hist2D
     A 2-D histogram dataclass. Should not be instantiated directly
 Histogrammer
-    A parent object used to create, manage, draw histograms
+    A parent object used to create, manage histograms
 """
 
 import numpy as np
@@ -112,7 +112,7 @@ class Hist1D:
             (self.bins[bin_min:bin_max] - mean) ** 2.0,
             weights=self.counts[bin_min:bin_max],
         )
-        return (integral, mean, np.sqrt(variance))
+        return (integral, mean, np.sqrt(variance))  # type: ignore
 
     def get_subrange(
         self, xrange: tuple[float, float]
@@ -129,7 +129,7 @@ class Hist1D:
         tuple[ndarray, ndarray]
             the subrange (bin edges, counts)
         """
-        mask = np.logical_and(self.bins > xrange[0], self.bins < xrange[1])
+        mask = np.logical_and(self.bins >= xrange[0], self.bins < xrange[1])
         return (self.bins[mask], self.counts[mask[:-1]])
 
 
@@ -216,6 +216,8 @@ class Hist2D:
         clamped_y_range = clamp_range(yrange, (self.y_bins.min(), self.y_bins.max()))
         bin_min = self.get_bin((clamped_x_range[0], clamped_y_range[0]))
         bin_max = self.get_bin((clamped_x_range[1], clamped_y_range[1]))
+        if bin_min == None or bin_max == None:
+            return None
 
         x_bin_range = np.arange(start=bin_min[0], stop=bin_max[0], step=1)
         y_bin_range = np.arange(start=bin_min[1], stop=bin_max[1], step=1)
@@ -238,7 +240,7 @@ class Hist2D:
             (self.y_bins[bin_min[1] : bin_max[1]] - mean_y) ** 2.0,
             weights=np.sum(self.counts[bin_min[1] : bin_max[1]], 1),
         )
-        return (integral, mean_x, mean_y, np.sqrt(var_x), np.sqrt(var_y))
+        return (integral, mean_x, mean_y, np.sqrt(var_x), np.sqrt(var_y))  # type: ignore
 
     def get_subrange(
         self, xrange: tuple[float, float], yrange: tuple[float, float]
@@ -257,8 +259,8 @@ class Hist2D:
         tuple[ndarray, ndarray, ndarray]
             the subrange (x bin edges, y bin edges, counts)
         """
-        x_mask = np.logical_and(self.x_bins > xrange[0], self.x_bins < xrange[1])
-        y_mask = np.logical_and(self.y_bins > yrange[0], self.y_bins < yrange[1])
+        x_mask = np.logical_and(self.x_bins >= xrange[0], self.x_bins < xrange[1])
+        y_mask = np.logical_and(self.y_bins >= yrange[0], self.y_bins < yrange[1])
         bin_mesh = np.ix_(y_mask, x_mask)
         return (self.x_bins[x_mask], self.y_bins[y_mask], self.counts[bin_mesh])
 
@@ -404,7 +406,7 @@ class Histogrammer:
         if type(hist) is not Hist2D:
             return False
         counts, _, _ = np.histogram2d(
-            x_data.flatten(), y_data.flatten(), bins=(hist.x_bins, hist.y_bins)
+            x_data.flatten(), y_data.flatten(), bins=(hist.x_bins, hist.y_bins)  # type: ignore
         )
         hist.counts += counts.T
         return True

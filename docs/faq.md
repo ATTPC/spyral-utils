@@ -6,4 +6,4 @@ Spyral is an analysis framework. It aims to provide a starting groud for AT-TPC 
 
 ## Why doesn't spyral-utils have feature x-y-z?
 
-spyral-utils needs to be fully compatible with Spyral's goals. It should be cross-platform, and support a minimum Python version of 3.10. These requirements alone can eliminate a lot of tools! But, usually the reason is we just haven't thought of it yet. If you have an idea of a useful tool to add to spyral-utils please see the [For Developers] section and submit a pull request or open an issue on GitHub!
+spyral-utils needs to be fully compatible with Spyral's goals. It should be cross-platform, and support a minimum Python version of 3.10. These requirements alone can eliminate a lot of tools! But, usually the reason is we just haven't thought of it yet. If you have an idea of a useful tool to add to spyral-utils please see the [For Developers](for_devs.md) section and submit a pull request or open an issue on GitHub!
