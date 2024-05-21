@@ -1,7 +1,5 @@
-from spyral_utils.nuclear.particle_id import ParticleID, deserialize_particle_id
-from spyral_utils.nuclear import NuclearDataMap
+from spyral_utils.nuclear import ParticleID, deserialize_particle_id, NuclearDataMap
 from pathlib import Path
-import polars as pl
 
 PID_JSON_PATH: Path = Path(__file__).parent.resolve() / "pid.json"
 

@@ -1,5 +1,4 @@
-from spyral_utils.nuclear.target import load_target, GasTarget, SolidTarget
-from spyral_utils.nuclear import NuclearDataMap
+from spyral_utils.nuclear import load_target, GasTarget, SolidTarget, NuclearDataMap
 from pathlib import Path
 import numpy as np
 
