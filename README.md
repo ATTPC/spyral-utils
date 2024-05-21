@@ -1,19 +1,17 @@
 # spyral-utils
 
-![testing workflow](https://github.com/gwm17/spyral-utils/actions/workflows/test-actions.yml/badge.svg)
+![testing workflow](https://github.com/ATTPC/spyral-utils/actions/workflows/test-actions.yml/badge.svg)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/spyral-utils.svg)](https://pypi.python.org/pypi/spyral-utils/)
 [![PyPI license](https://img.shields.io/pypi/l/spyral-utils.svg)](https://pypi.python.org/pypi/spyral-utils/)
 
-spyral-utils is a utility library that contains some of the  core functionality of [Spyral](https://github.com/turinath/Spyral.git). These utilities were found to be useful not just within Spyral but also continuing analysis after using Spyral. Some key utilities include:
+spyral-utils is a utility library that contains some of the  core functionality of [Spyral](https://github.com/ATTPC/Spyral.git). These utilities were found to be useful not just within Spyral but also continuing analysis after using Spyral. Some key utilities include:
 
 - Nuclear masses from the AMDC AME 2020 masses
 - Some histogramming and gating/cuting tools that are plotting backend agnostic
 - Energy loss analysis for gas and solid targets using pycatima
 - 4-vector analysis through the vector package
 
-spyral-utils is still in very early development, so all mileage may vary!
-
-See the [documentation](https://gwm17.github.io/spyral-utils/) for more details.
+See the [documentation](https://attpc.github.io/spyral-utils/) for more details.
 
 ## Installation
 
@@ -23,7 +21,7 @@ spyral-utils can be installed using `pip install spyral-utils`
 
 spyral-utils requires Python >= 3.10 and  < 3.13
 
-spyral-utils is cross-platform and tested for MacOS 13, Windows 11, and Ubuntu 22.04.
+spyral-utils is cross-platform and tested for MacOS 14, Windows 11, and Ubuntu 22.04.
 
 ## Formats
 
