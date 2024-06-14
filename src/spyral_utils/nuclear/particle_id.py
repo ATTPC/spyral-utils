@@ -1,5 +1,5 @@
 from . import NuclearDataMap, NucleusData
-from ..plot import Cut2D, serialize_cut
+from ..plot import Cut2D, DEFAULT_CUT_AXIS
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -67,8 +67,16 @@ def deserialize_particle_id(
                 )
                 return None
 
+            xaxis = DEFAULT_CUT_AXIS
+            yaxis = DEFAULT_CUT_AXIS
+            if "xaxis" in json_data and "yaxis" in json_data:
+                xaxis = json_data["xaxis"]
+                yaxis = json_data["yaxis"]
+
             pid = ParticleID(
-                Cut2D(json_data["name"], json_data["vertices"]),
+                Cut2D(
+                    json_data["name"], json_data["vertices"], x_axis=xaxis, y_axis=yaxis
+                ),
                 nuclear_map.get_data(json_data["Z"], json_data["A"]),
             )
 

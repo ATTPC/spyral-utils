@@ -1,7 +1,5 @@
 {
     "name": "test_cut",
-    "xaxis": "x",
-    "yaxis": "y",
     "vertices": [
         [
             0.0,
