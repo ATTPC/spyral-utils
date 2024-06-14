@@ -355,21 +355,21 @@ def deserialize_cut(filepath: Path) -> Cut2D | None:
         with open(filepath, "r") as input:
             buffer = input.read()
             cut_dict = json.loads(buffer)
-            if not (
-                "name" in cut_dict
-                and "vertices" in cut_dict
-                and "xaxis" in cut_dict
-                and "yaxis" in cut_dict
-            ):
+            if not ("name" in cut_dict and "vertices" in cut_dict):
                 print(
                     f"Data in file {filepath} is not the right format for Cut2D, could not load"
                 )
                 return None
+            xaxis = DEFAULT_CUT_AXIS
+            yaxis = DEFAULT_CUT_AXIS
+            if "xaxis" in cut_dict and "yaxis" in cut_dict:
+                xaxis = cut_dict["xaxis"]
+                yaxis = cut_dict["yaxis"]
             return Cut2D(
                 cut_dict["name"],
                 cut_dict["vertices"],
-                x_axis=cut_dict["xaxis"],
-                y_axis=cut_dict["yaxis"],
+                x_axis=xaxis,
+                y_axis=yaxis,
             )
     except Exception as error:
         print(
