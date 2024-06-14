@@ -355,7 +355,7 @@ def deserialize_cut(filepath: Path) -> Cut2D | None:
         with open(filepath, "r") as input:
             buffer = input.read()
             cut_dict = json.loads(buffer)
-            if (
+            if not (
                 "name" in cut_dict
                 and "vertices" in cut_dict
                 and "xaxis" in cut_dict
@@ -369,7 +369,7 @@ def deserialize_cut(filepath: Path) -> Cut2D | None:
                 cut_dict["name"],
                 cut_dict["vertices"],
                 x_axis=cut_dict["xaxis"],
-                y_axis=cut_dict["y_axis"],
+                y_axis=cut_dict["yaxis"],
             )
     except Exception as error:
         print(

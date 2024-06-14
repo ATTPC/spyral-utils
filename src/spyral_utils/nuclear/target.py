@@ -262,6 +262,40 @@ class GasTarget:
             eloss[idx] = catima.calculate(projectile, self.material).get_dict()["Eloss"]
         return eloss
 
+    def get_range(
+        self, projectile_data: NucleusData, projectile_energy: float
+    ) -> float:
+        """Calculate the range of a projectile in the target
+
+        Parameters
+        ----------
+        projectile_data: NucleusData
+            the projectile type
+        projectile_energy: float
+            the projectile kinetic energy in MeV
+
+        Returns
+        -------
+        float
+            The range in m
+        """
+        mass_u = projectile_data.mass / AMU_2_MEV  # convert to u
+        projectile = catima.Projectile(
+            mass_u, projectile_data.Z, T=projectile_energy / mass_u
+        )
+        range_gcm2 = catima.calculate(projectile, self.material).get_dict()["range"]
+        range_m = range_gcm2 / self.material.density() * 0.01
+        return range_m
+
+    def get_number_density(self) -> float:
+        """Get the number density of gas molecules
+
+        Returns
+        -------
+        Number density of gas molecules in molecules/cm^3
+        """
+        return self.material.number_density()
+
 
 class SolidTarget:
     """An AT-TPC gas target
@@ -399,6 +433,39 @@ class SolidTarget:
             eloss[idx] = catima.calculate(projectile, self.material).get_dict()["Eloss"]
         self.material.thickness(nominal_thickness)
         return eloss
+
+    def get_range(
+        self, projectile_data: NucleusData, projectile_energy: float
+    ) -> float:
+        """Calculate the range of a projectile in the target in g/cm^2
+
+        Parameters
+        ----------
+        projectile_data: NucleusData
+            the projectile type
+        projectile_energy: float
+            the projectile kinetic energy in MeV
+
+        Returns
+        -------
+        float
+            The range in g/cm^2
+        """
+        mass_u = projectile_data.mass / AMU_2_MEV  # convert to u
+        projectile = catima.Projectile(
+            mass_u, projectile_data.Z, T=projectile_energy / mass_u
+        )
+
+        return catima.calculate(projectile, self.material).get_dict()["range"]
+
+    def get_number_density(self) -> float:
+        """Get the number density of gas molecules
+
+        Returns
+        -------
+        Number density of gas molecules in molecules/cm^3
+        """
+        return self.material.number_density()
 
 
 def load_target(
