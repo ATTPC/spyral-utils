@@ -458,15 +458,6 @@ class SolidTarget:
 
         return catima.calculate(projectile, self.material).get_dict()["range"]
 
-    def get_number_density(self) -> float:
-        """Get the number density of gas molecules
-
-        Returns
-        -------
-        Number density of gas molecules in molecules/cm^3
-        """
-        return self.material.number_density()
-
 
 def load_target(
     target_path: Path, nuclear_map: NuclearDataMap
