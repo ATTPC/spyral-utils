@@ -33,7 +33,7 @@ The JSON description of a target is as follows:
 
 For a gas target:
 
-```[json]
+```json
 {
     "compound": [
         [1, 1, 2]
@@ -45,7 +45,7 @@ For a gas target:
 
 For a solid target:
 
-```[json]
+```json
 {
     "compound": [
         [6, 12, 1]
@@ -61,7 +61,7 @@ The indication of a `null` pressure or thickness tells spyral-utils if that JSON
 
 The JSON description of a 2D-Cut (or 2D-gate) on data is as follows:
 
-```[json]
+```json
 {
     "name": "test_cut",
     "vertices": [
@@ -74,13 +74,28 @@ The JSON description of a 2D-Cut (or 2D-gate) on data is as follows:
 }
 ```
 
-`name` is a identifier given for that particular cut. `verticies` is a list of `[x,y]` coordinates which define the polygon. Note that the polygon must be closed (the final vertex must be the same as the first vertex).
+`name` is a identifier given for that particular cut. `verticies` is a list of `[x,y]` coordinates which define the polygon. Note that the polygon must be closed (the final vertex must be the same as the first vertex). You can also add the `xaxis` and `yaxis` keywords to specify the names of the axes of the cut (i.e. the column names of a dataframe).
+
+```json
+{
+    "name": "test_cut",
+    "xaxis": "my_x",
+    "yaxis": "my_y",
+    "vertices": [
+        [0.0, 0.0],
+        [1.0, 0.0],
+        [1.0, 1.0],
+        [0.0, 1.0],
+        [0.0, 0.0]
+    ]
+}
+```
 
 ### Particle ID
 
 The JSON description of a particle ID gate is as follows:
 
-```[json]
+```json
 {
     "name": "test_cut",
     "vertices": [
@@ -95,7 +110,24 @@ The JSON description of a particle ID gate is as follows:
 }
 ```
 
-The `name` and `vertices` fields are the same as those used by a 2D-Cut. The particle ID has the additional data `Z` and `A` which are the element and mass number of the associated nucleus.
+The `name` and `vertices` fields are the same as those used by a Cut2D. The particle ID has the additional data `Z` and `A` which are the element and mass number of the associated nucleus. Like in a Cut2D you can also specify the axis names of the cut
+
+```json
+{
+    "name": "test_cut",
+    "xaxis": "my_x",
+    "yaxis": "my_y",
+    "vertices": [
+        [0.0, 0.0],
+        [1.0, 0.0],
+        [1.0, 1.0],
+        [0.0, 1.0],
+        [0.0, 0.0]
+    ],
+    "Z": 6,
+    "A": 12
+}
+```
 
 ## References
 

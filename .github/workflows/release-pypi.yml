@@ -13,6 +13,6 @@ jobs:
             id-token: write
         steps:
             - uses: actions/checkout@v4
-            - uses: pdm-project/setup-pdm@v3
+            - uses: pdm-project/setup-pdm@v4
             - name: Publish packages to PyPI
               run: pdm publish

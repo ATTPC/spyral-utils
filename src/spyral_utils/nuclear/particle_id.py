@@ -1,5 +1,5 @@
 from . import NuclearDataMap, NucleusData
-from ..plot import Cut2D, serialize_cut
+from ..plot import Cut2D, DEFAULT_CUT_AXIS
 
 from dataclasses import dataclass
 from pathlib import Path
@@ -53,28 +53,40 @@ def deserialize_particle_id(
     ParticleID | None
         The deserialized ParticleID or None on failure
     """
-    with open(path, "r") as cut_file:
-        json_data = load(cut_file)
-        if (
-            "name" not in json_data
-            or "vertices" not in json_data
-            or "Z" not in json_data
-            or "A" not in json_data
-        ):
-            print(
-                f"ParticleID could not load cut in {path}, the requested data is not present."
+    try:
+        with open(path, "r") as cut_file:
+            json_data = load(cut_file)
+            if (
+                "name" not in json_data
+                or "vertices" not in json_data
+                or "Z" not in json_data
+                or "A" not in json_data
+            ):
+                print(
+                    f"ParticleID could not load cut in {path}, the requested data is not present."
+                )
+                return None
+
+            xaxis = DEFAULT_CUT_AXIS
+            yaxis = DEFAULT_CUT_AXIS
+            if "xaxis" in json_data and "yaxis" in json_data:
+                xaxis = json_data["xaxis"]
+                yaxis = json_data["yaxis"]
+
+            pid = ParticleID(
+                Cut2D(
+                    json_data["name"], json_data["vertices"], x_axis=xaxis, y_axis=yaxis
+                ),
+                nuclear_map.get_data(json_data["Z"], json_data["A"]),
             )
-            return None
 
-        pid = ParticleID(
-            Cut2D(json_data["name"], json_data["vertices"]),
-            nuclear_map.get_data(json_data["Z"], json_data["A"]),
-        )
+            if pid.nucleus.A == 0:
+                print(
+                    f'Nucleus Z: {json_data["Z"]} A: {json_data["A"]} requested by ParticleID {json_data["name"]} does not exist.'
+                )
+                return None
 
-        if pid.nucleus.A == 0:
-            print(
-                f'Nucleus Z: {json_data["Z"]} A: {json_data["A"]} requested by ParticleID {json_data["name"]} does not exist.'
-            )
-            return None
-
-        return pid
+            return pid
+    except Exception as error:
+        print(f"Could not deserialize ParticleID with error: {error}")
+        return None
