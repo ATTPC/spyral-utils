@@ -1024,7 +1024,19 @@
 <span class="normal">77</span>
 <span class="normal">78</span>
 <span class="normal">79</span>
-<span class="normal">80</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">deserialize_particle_id</span><span class="p">(</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">deserialize_particle_id</span><span class="p">(</span>
     <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">nuclear_map</span><span class="p">:</span> <span class="n">NuclearDataMap</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParticleID</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Load a ParticleID from a JSON file</span>
@@ -1041,31 +1053,43 @@
 <span class="sd">    ParticleID | None</span>
 <span class="sd">        The deserialized ParticleID or None on failure</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cut_file</span><span class="p">:</span>
-        <span class="n">json_data</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">cut_file</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span>
-            <span class="s2">&quot;name&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
-            <span class="ow">or</span> <span class="s2">&quot;vertices&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
-            <span class="ow">or</span> <span class="s2">&quot;Z&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
-            <span class="ow">or</span> <span class="s2">&quot;A&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
-        <span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;ParticleID could not load cut in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">, the requested data is not present.&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cut_file</span><span class="p">:</span>
+            <span class="n">json_data</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="n">cut_file</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="s2">&quot;name&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
+                <span class="ow">or</span> <span class="s2">&quot;vertices&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
+                <span class="ow">or</span> <span class="s2">&quot;Z&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
+                <span class="ow">or</span> <span class="s2">&quot;A&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">json_data</span>
+            <span class="p">):</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;ParticleID could not load cut in </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">, the requested data is not present.&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="n">xaxis</span> <span class="o">=</span> <span class="n">DEFAULT_CUT_AXIS</span>
+            <span class="n">yaxis</span> <span class="o">=</span> <span class="n">DEFAULT_CUT_AXIS</span>
+            <span class="k">if</span> <span class="s2">&quot;xaxis&quot;</span> <span class="ow">in</span> <span class="n">json_data</span> <span class="ow">and</span> <span class="s2">&quot;yaxis&quot;</span> <span class="ow">in</span> <span class="n">json_data</span><span class="p">:</span>
+                <span class="n">xaxis</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;xaxis&quot;</span><span class="p">]</span>
+                <span class="n">yaxis</span> <span class="o">=</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;yaxis&quot;</span><span class="p">]</span>
+
+            <span class="n">pid</span> <span class="o">=</span> <span class="n">ParticleID</span><span class="p">(</span>
+                <span class="n">Cut2D</span><span class="p">(</span>
+                    <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;vertices&quot;</span><span class="p">],</span> <span class="n">x_axis</span><span class="o">=</span><span class="n">xaxis</span><span class="p">,</span> <span class="n">y_axis</span><span class="o">=</span><span class="n">yaxis</span>
+                <span class="p">),</span>
+                <span class="n">nuclear_map</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;Z&quot;</span><span class="p">],</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]),</span>
             <span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="n">pid</span> <span class="o">=</span> <span class="n">ParticleID</span><span class="p">(</span>
-            <span class="n">Cut2D</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;vertices&quot;</span><span class="p">]),</span>
-            <span class="n">nuclear_map</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;Z&quot;</span><span class="p">],</span> <span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]),</span>
-        <span class="p">)</span>
+            <span class="k">if</span> <span class="n">pid</span><span class="o">.</span><span class="n">nucleus</span><span class="o">.</span><span class="n">A</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;Nucleus Z: </span><span class="si">{</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;Z&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> A: </span><span class="si">{</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> requested by ParticleID </span><span class="si">{</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> does not exist.&#39;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">pid</span><span class="o">.</span><span class="n">nucleus</span><span class="o">.</span><span class="n">A</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s1">&#39;Nucleus Z: </span><span class="si">{</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;Z&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> A: </span><span class="si">{</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> requested by ParticleID </span><span class="si">{</span><span class="n">json_data</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> does not exist.&#39;</span>
-            <span class="p">)</span>
-            <span class="k">return</span> <span class="kc">None</span>
-
-        <span class="k">return</span> <span class="n">pid</span>
+            <span class="k">return</span> <span class="n">pid</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not deserialize ParticleID with error: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
 </code></pre></div></td></tr></table></div>
           </details>
   </div>
