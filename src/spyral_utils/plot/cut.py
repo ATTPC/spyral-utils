@@ -22,6 +22,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+DEFAULT_CUT_AXIS = "DefaultAxis"
+
 
 class CutHandler:
     """Handler to recieve vertices from a matplotlib or plotly selector.
@@ -139,6 +141,14 @@ class Cut2D:
         A matplotlib path (polygon) that is the actual cut shape
     name: str
         A name for the cut
+    x_axis: str
+        A name for the x-coordinate axis. Can be used with dataframes
+        to programmatically specify what data should be used to process
+        a cut.
+    y_axis: str
+        A name for the y-coordinate axis. Can be used with dataframes
+        to programmatically specify what data should be used to process
+        a cut.
 
     Methods
     -------
@@ -154,9 +164,17 @@ class Cut2D:
         Get the JSON representation of the cut
     """
 
-    def __init__(self, name: str, vertices: list[tuple[float, float]]):
+    def __init__(
+        self,
+        name: str,
+        vertices: list[tuple[float, float]],
+        x_axis: str = DEFAULT_CUT_AXIS,
+        y_axis: str = DEFAULT_CUT_AXIS,
+    ):
         self.polygon: Polygon = Polygon(vertices)
         self.name = name
+        self.x_axis = x_axis
+        self.y_axis = y_axis
 
     def is_point_inside(self, x: float, y: float) -> bool:
         """Is a point in the cut
@@ -221,6 +239,60 @@ class Cut2D:
         """
         return tuple(self.polygon.exterior.coords)
 
+    def get_x_axis(self) -> str:
+        """Get the name of the cut data x-axis
+
+        The x-axis is the name of the data used to form
+        the cut along the x-axis. Typically, this is the name
+        of a dataframe column.
+
+        Returns
+        -------
+        str
+            The name of the x-axis. By default, the value
+            is DefaultAxis.
+        """
+        return self.x_axis
+
+    def get_y_axis(self) -> str:
+        """Get the name of the cut data y-axis
+
+        The y-axis is the name of the data used to form
+        the cut along the y-axis. Typically, this is the name
+        of a dataframe column.
+
+        Returns
+        -------
+        str
+            The name of the y-axis. By default, the value
+            is DefaultAxis.
+        """
+        return self.y_axis
+
+    def is_default_x_axis(self) -> bool:
+        """Check if the x-axis is the default value
+
+        If the x-axis field is unset, it defaults to DefaultAxis.
+
+        Returns
+        -------
+        bool
+            True if default, False otherwise
+        """
+        return self.x_axis == DEFAULT_CUT_AXIS
+
+    def is_default_y_axis(self) -> bool:
+        """Check if the y-axis is the default value
+
+        If the y-axis field is unset, it defaults to DefaultAxis.
+
+        Returns
+        -------
+        bool
+            True if default, False otherwise
+        """
+        return self.y_axis == DEFAULT_CUT_AXIS
+
     def serialize_json(self) -> str:
         """Serialize to JSON
 
@@ -233,6 +305,8 @@ class Cut2D:
             self,
             default=lambda obj: {
                 "name": obj.name,
+                "xaxis": obj.x_axis,
+                "yaxis": obj.y_axis,
                 "vertices": tuple(obj.polygon.exterior.coords),
             },
             indent=4,
@@ -281,13 +355,23 @@ def deserialize_cut(filepath: Path) -> Cut2D | None:
         with open(filepath, "r") as input:
             buffer = input.read()
             cut_dict = json.loads(buffer)
-            if "name" not in cut_dict or "vertices" not in cut_dict:
+            if (
+                "name" in cut_dict
+                and "vertices" in cut_dict
+                and "xaxis" in cut_dict
+                and "yaxis" in cut_dict
+            ):
                 print(
                     f"Data in file {filepath} is not the right format for Cut2D, could not load"
                 )
                 return None
-            return Cut2D(cut_dict["name"], cut_dict["vertices"])
-    except OSError as error:
+            return Cut2D(
+                cut_dict["name"],
+                cut_dict["vertices"],
+                x_axis=cut_dict["xaxis"],
+                y_axis=cut_dict["y_axis"],
+            )
+    except Exception as error:
         print(
             f"An error occurred reading trying to read a cut from file {filepath}: {error}"
         )
