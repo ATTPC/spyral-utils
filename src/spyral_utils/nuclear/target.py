@@ -55,6 +55,7 @@ class TargetData:
     compound: list[tuple[int, int, int]] = field(default_factory=list)  # (Z, A, S)
     pressure: float | None = None  # torr
     thickness: float | None = None  # ug/cm^2
+    temperature: float | None = None  # K
 
     def density(self) -> float:
         """Get the gas density in g/cm^3
@@ -70,7 +71,10 @@ class TargetData:
             molar_mass: float = 0.0
             for z, a, s in self.compound:
                 molar_mass += a * s
-            return molar_mass * self.pressure / (GAS_CONSTANT * ROOM_TEMPERATURE)
+            T = self.temperature
+            if T is None:
+                T = ROOM_TEMPERATURE
+            return molar_mass * self.pressure / (GAS_CONSTANT * T)
 
 
 def deserialize_target_data(target_path: Path) -> TargetData | None:
@@ -95,11 +99,19 @@ def deserialize_target_data(target_path: Path) -> TargetData | None:
         ):
             return None
         else:
-            return TargetData(
-                json_data["compound"],
-                json_data["pressure(Torr)"],
-                json_data["thickness(ug/cm^2)"],
-            )
+            if "temperature(K)" not in json_data:
+                return TargetData(
+                    json_data["compound"],
+                    json_data["pressure(Torr)"],
+                    json_data["thickness(ug/cm^2)"],
+                )
+            else:
+                return TargetData(
+                    json_data["compound"],
+                    json_data["pressure(Torr)"],
+                    json_data["thickness(ug/cm^2)"],
+                    json_data["temperature(K)"],
+                )
 
 
 def serialize_target_data(target_path: Path, data: TargetData):

@@ -4,6 +4,7 @@ import numpy as np
 
 GAS_TARGET_PATH: Path = Path(__file__).parent.resolve() / "gas_target.json"
 SOLID_TARGET_PATH: Path = Path(__file__).parent.resolve() / "solid_target.json"
+GAS_TARGET_TEMP_PATH: Path = Path(__file__).parent.resolve() / "gas_target_temp.json"
 PROJ_Z: int = 1
 PROJ_A: int = 1
 PROJ_KE: float = 5.0  # MeV
@@ -76,3 +77,14 @@ def test_solid_target_range():
     print(target.material.density())
 
     assert abs(range - LISE_VALUE) < PRECISION * LISE_VALUE
+
+
+def test_gas_target_with_temp():
+    nuc_map = NuclearDataMap()
+    target_temp = load_target(GAS_TARGET_TEMP_PATH, nuc_map)
+    target_no_temp = load_target(GAS_TARGET_PATH, nuc_map)
+
+    assert isinstance(target_temp, GasTarget)
+    assert isinstance(target_no_temp, GasTarget)
+    assert target_temp.data.temperature is not None
+    assert target_temp.density != target_no_temp.density
