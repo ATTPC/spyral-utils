@@ -30,7 +30,11 @@ Please use [type hints](https://docs.python.org/3/library/typing.html) to annota
 
 ### Formatting
 
-spyral-utils follows the default [black](https://black.readthedocs.io/en/stable/) style. Please use black to format your code.
+spyral-utils follows the default [Ruff](https:/https://docs.astral.sh/ruff/) style. Please use black to format your code.
+
+### Linting
+
+spyral-utils again uses [Ruff](https://docs.astral.sh/ruff/) with the rules specified in pyproject.toml. You can either use `ruff check` manually, or many IDEs support Ruff (such as VS Code).
 
 ### Files
 
