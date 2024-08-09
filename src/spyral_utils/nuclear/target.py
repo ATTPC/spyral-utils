@@ -69,12 +69,12 @@ class TargetData:
             return 0.0
         else:
             molar_mass: float = 0.0
-            for z, a, s in self.compound:
+            for _z, a, s in self.compound:
                 molar_mass += a * s
-            T = self.temperature
-            if T is None:
-                T = ROOM_TEMPERATURE
-            return molar_mass * self.pressure / (GAS_CONSTANT * T)
+            temperature = self.temperature
+            if temperature is None:
+                temperature = ROOM_TEMPERATURE
+            return molar_mass * self.pressure / (GAS_CONSTANT * temperature)
 
 
 def deserialize_target_data(target_path: Path) -> TargetData | None:
@@ -98,20 +98,19 @@ def deserialize_target_data(target_path: Path) -> TargetData | None:
             or "thickness(ug/cm^2)" not in json_data
         ):
             return None
+        elif "temperature(K)" not in json_data:
+            return TargetData(
+                json_data["compound"],
+                json_data["pressure(Torr)"],
+                json_data["thickness(ug/cm^2)"],
+            )
         else:
-            if "temperature(K)" not in json_data:
-                return TargetData(
-                    json_data["compound"],
-                    json_data["pressure(Torr)"],
-                    json_data["thickness(ug/cm^2)"],
-                )
-            else:
-                return TargetData(
-                    json_data["compound"],
-                    json_data["pressure(Torr)"],
-                    json_data["thickness(ug/cm^2)"],
-                    json_data["temperature(K)"],
-                )
+            return TargetData(
+                json_data["compound"],
+                json_data["pressure(Torr)"],
+                json_data["thickness(ug/cm^2)"],
+                json_data["temperature(K)"],
+            )
 
 
 def serialize_target_data(target_path: Path, data: TargetData):

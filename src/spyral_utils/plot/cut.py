@@ -123,7 +123,7 @@ class CutHandler:
 
         cut_default_name = f"cut_{len(self.cuts)}"
         self.cuts[cut_default_name] = Cut2D(
-            cut_default_name, list(zip(selector.xs, selector.ys))
+            cut_default_name, list(zip(selector.xs, selector.ys, strict=True))
         )
 
 
