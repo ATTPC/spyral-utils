@@ -1,5 +1,7 @@
 """Module containing AT-TPC representation of target materials and their associated energy loss calculations.
 
+Target materials can be defined as either the corresponding CAtima name or a compound array.
+
 Classes should never be directly instantiated, rather use the load_target function to do the work for you.
 
 Classes
@@ -27,10 +29,14 @@ from .nuclear_map import NuclearDataMap, NucleusData
 from ..constants import AMU_2_MEV, GAS_CONSTANT, ROOM_TEMPERATURE
 
 import pycatima as catima
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from json import load, dumps
 import numpy as np
+
+
+class TargetError(Exception):
+    pass
 
 
 @dataclass
@@ -52,7 +58,8 @@ class TargetData:
         get the density of the gas (return 0 if solid as this should not be used)
     """
 
-    compound: list[tuple[int, int, int]] = field(default_factory=list)  # (Z, A, S)
+    id: int | None = None  # pycatima id
+    compound: list[tuple[int, int, int]] | None = None  # (Z, A, S)
     pressure: float | None = None  # torr
     thickness: float | None = None  # ug/cm^2
 
@@ -66,11 +73,21 @@ class TargetData:
         """
         if self.pressure is None:
             return 0.0
-        else:
+        elif self.compound is not None:
             molar_mass: float = 0.0
             for z, a, s in self.compound:
                 molar_mass += a * s
             return molar_mass * self.pressure / (GAS_CONSTANT * ROOM_TEMPERATURE)
+        elif self.id is not None:
+            material = catima.get_material(self.id)
+            return (
+                material.molar_mass()
+                * self.pressure
+                / (GAS_CONSTANT * ROOM_TEMPERATURE)
+            )
+        else:
+            # Idk what this is...
+            return 0.0
 
 
 def deserialize_target_data(target_path: Path) -> TargetData | None:
@@ -89,13 +106,19 @@ def deserialize_target_data(target_path: Path) -> TargetData | None:
     with open(target_path, "r") as target_file:
         json_data = load(target_file)
         if (
-            "compound" not in json_data
+            "id" not in json_data
+            or "compound" not in json_data
             or "pressure(Torr)" not in json_data
             or "thickness(ug/cm^2)" not in json_data
         ):
             return None
         else:
             return TargetData(
+                # Absolutely foul. Have to convert string to material code or allow
+                # None to pass through
+                catima.material.__dict__[json_data["id"]]
+                if json_data["id"] is not None
+                else None,
                 json_data["compound"],
                 json_data["pressure(Torr)"],
                 json_data["thickness(ug/cm^2)"],
@@ -116,6 +139,7 @@ def serialize_target_data(target_path: Path, data: TargetData):
         json_str = dumps(
             data,
             default=lambda data: {
+                "id": data.id,
                 "compound": data.compound,
                 "pressure(Torr)": data.pressure,
                 "thickness(ug/cm^2)": data.thickness,
@@ -155,29 +179,40 @@ class GasTarget:
 
     def __init__(self, target_data: TargetData, nuclear_data: NuclearDataMap):
         self.data = target_data
+        self.material = None
 
-        self.pretty_string: str = "(Gas)" + "".join(
-            [
-                f"{nuclear_data.get_data(z, a).pretty_iso_symbol}<sub>{s}</sub>"
-                for (z, a, s) in self.data.compound
-            ]
-        )
-        self.ugly_string: str = "(Gas)" + "".join(
-            [
-                f"{nuclear_data.get_data(z, a).isotopic_symbol}{s}"
-                for (z, a, s) in self.data.compound
-            ]
-        )
+        if self.data.compound is not None:
+            self.pretty_string: str = "(Gas)" + "".join(
+                [
+                    f"{nuclear_data.get_data(z, a).pretty_iso_symbol}<sub>{s}</sub>"
+                    for (z, a, s) in self.data.compound
+                ]
+            )
+            self.ugly_string: str = "(Gas)" + "".join(
+                [
+                    f"{nuclear_data.get_data(z, a).isotopic_symbol}{s}"
+                    for (z, a, s) in self.data.compound
+                ]
+            )
 
-        # Construct the target material
-        self.material = catima.Material()
-        for (
-            z,
-            a,
-            s,
-        ) in self.data.compound:
-            self.material.add_element(
-                nuclear_data.get_data(z, a).atomic_mass, z, float(s)
+            # Construct the target material
+            self.material = catima.Material()
+            for (
+                z,
+                a,
+                s,
+            ) in self.data.compound:
+                self.material.add_element(
+                    nuclear_data.get_data(z, a).atomic_mass, z, float(s)
+                )
+        elif self.data.id is not None:
+            self.material = catima.get_material(self.data.id)
+            self.pretty_string: str = f"(Gas){self.material}"
+            self.ugly_string: str = f"(Gas){self.material}"
+
+        if self.material is None:
+            raise TargetError(
+                "GasTarget could not be created. No compound or material id was defined"
             )
         self.density: float = self.data.density()
         self.material.density(self.density)
@@ -328,30 +363,47 @@ class SolidTarget:
 
     def __init__(self, target_data: TargetData, nuclear_data: NuclearDataMap):
         self.data = target_data
-        self.pretty_string: str = "(Solid)" + "".join(
-            [
-                f"{nuclear_data.get_data(z, a).pretty_iso_symbol}<sub>{s}</sub>"
-                for (z, a, s) in self.data.compound
-            ]
-        )
-        self.ugly_string: str = "(Solid)" + "".join(
-            [
-                f"{nuclear_data.get_data(z, a).isotopic_symbol}{s}"
-                for (z, a, s) in self.data.compound
-            ]
-        )
+        self.material = None
 
-        self.material = catima.Material()
-        for (
-            z,
-            a,
-            s,
-        ) in self.data.compound:
-            self.material.add_element(
-                nuclear_data.get_data(z, a).atomic_mass, z, float(s)
+        if self.data.compound is not None:
+            self.pretty_string: str = "(Solid)" + "".join(
+                [
+                    f"{nuclear_data.get_data(z, a).pretty_iso_symbol}<sub>{s}</sub>"
+                    for (z, a, s) in self.data.compound
+                ]
+            )
+            self.ugly_string: str = "(Solid)" + "".join(
+                [
+                    f"{nuclear_data.get_data(z, a).isotopic_symbol}{s}"
+                    for (z, a, s) in self.data.compound
+                ]
+            )
+
+            # Construct the target material
+            self.material = catima.Material()
+            for (
+                z,
+                a,
+                s,
+            ) in self.data.compound:
+                self.material.add_element(
+                    nuclear_data.get_data(z, a).atomic_mass, z, float(s)
+                )
+        elif self.data.id is not None:
+            self.material = catima.get_material(self.data.id)
+            self.pretty_string: str = f"(Solid){self.material}"
+            self.ugly_string: str = f"(Solid){self.material}"
+
+        if self.material is None:
+            raise TargetError(
+                "SolidTarget could not be created. No compound or material id was defined"
+            )
+        elif self.data.thickness is None:
+            raise TargetError(
+                "SolidTarget could not be created. No thickness was given"
             )
         self.material.thickness(
-            target_data.thickness * self.UG2G
+            self.data.thickness * self.UG2G
         )  # Convert ug/cm^2 to g/cm^2
 
     def get_dedx(self, projectile_data: NucleusData, projectile_energy: float) -> float:
@@ -479,7 +531,7 @@ def load_target(
         Return a GasTarget or SolidTarget where appropriate. Return None on failure.
     """
     data = deserialize_target_data(target_path)
-    if data is None:
+    if data is None or (data.id is None and data.compound is None):
         return None
     elif data.pressure is None:
         return SolidTarget(data, nuclear_map)

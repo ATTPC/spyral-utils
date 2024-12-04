@@ -35,6 +35,7 @@ For a gas target:
 
 ```json
 {
+    "id": null,
     "compound": [
         [1, 1, 2]
     ],
@@ -47,6 +48,7 @@ For a solid target:
 
 ```json
 {
+    "id": null,
     "compound": [
         [6, 12, 1]
     ],
@@ -55,7 +57,26 @@ For a solid target:
 }
 ```
 
-The indication of a `null` pressure or thickness tells spyral-utils if that JSON is for a solid or gas target. Compound specifications are lists of elements where each element is an array of `[Z, A, S]`. `S` is the stoichiometry of that particular element in the compound. spyral-utils does not support target layers at this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the gas target is for <sup>1</sup>H<sub>2</sub> gas at 300 Torr pressure and the solid target is for <sup>12</sup>C<sub>1</sub> foil with a thickness of 50 &mu;g/cm<sup>2</sup>.
+The indication of a `null` pressure or thickness tells spyral-utils if that JSON is for a solid or gas target. Compound specifications are lists of
+elements where each element is an array of `[Z, A, S]`. `S` is the stoichiometry of that particular element in the compound. spyral-utils does not
+support target layers at this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the
+gas target is for <sup>1</sup>H<sub>2</sub> gas at 300 Torr pressure and the solid target is for <sup>12</sup>C<sub>1</sub> foil with a thickness of
+50 &mu;g/cm<sup>2</sup>.
+
+If you are using a material that is not easily defined by the compound field, you can use the CAtima definition, if it exists.
+For example, if you are using P10 gas you can define the gas target as:
+
+```json
+{
+    "id": "P10",
+    "compound": null,
+    "pressure(Torr)": 300.0,
+    "thickness(ug/cm^2)": null
+}
+```
+
+The complete list of available CAtima materials can be found in the [docs](https://attpc.github.io/spyral-utils/quick_start) or the CAtima
+[docs](https://github.com/hrosiak/catima/docs/catima_manual.md).
 
 ### 2D-Cuts
 
