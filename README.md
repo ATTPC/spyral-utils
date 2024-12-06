@@ -29,8 +29,6 @@ Several parts of the utilities allow for saving and creating objects from JSON. 
 
 ### Targets
 
-The JSON description of a target is as follows:
-
 For a gas target:
 
 ```json
@@ -38,8 +36,7 @@ For a gas target:
     "compound": [
         [1, 1, 2]
     ],
-    "pressure(Torr)": 300.0,
-    "thickness(ug/cm^2)": null
+    "pressure(Torr)": 300.0
 }
 ```
 
@@ -50,12 +47,34 @@ For a solid target:
     "compound": [
         [6, 12, 1]
     ],
-    "pressure(Torr)": null,
     "thickness(ug/cm^2)": 50.0
 }
 ```
 
-The indication of a `null` pressure or thickness tells spyral-utils if that JSON is for a solid or gas target. Compound specifications are lists of elements where each element is an array of `[Z, A, S]`. `S` is the stoichiometry of that particular element in the compound. spyral-utils does not support target layers at this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the gas target is for <sup>1</sup>H<sub>2</sub> gas at 300 Torr pressure and the solid target is for <sup>12</sup>C<sub>1</sub> foil with a thickness of 50 &mu;g/cm<sup>2</sup>.
+For a gas mixture:
+
+```json
+{
+    "components": [
+        [
+            [6, 12, 1],
+            [1, 1, 4],
+        ],
+        [
+            [18, 40, 1]
+        ]
+    ],
+    "volume_fractions": [0.1, 0.9],
+    "pressure(Torr)": 50.0
+}
+```
+
+Compound specifications are lists of elements where each element is an array of `[Z, A, S]`. `S` is the 
+stoichiometry of that particular element in the compound. spyral-utils does not support target layers at 
+this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the 
+gas target is for <sup>1</sup>H<sub>2</sub> gas at 300 Torr pressure and the solid target is for
+<sup>12</sup>C<sub>1</sub> foil with a thickness of 50 &mu;g/cm<sup>2</sup>. The gas mixutre example is for
+P10 gas (10% methane in argon) at 50 Torr.
 
 ### 2D-Cuts
 

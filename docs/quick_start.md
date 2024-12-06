@@ -53,8 +53,7 @@ For a gas target:
     "compound": [
         [1, 1, 2]
     ],
-    "pressure(Torr)": 300.0,
-    "thickness(ug/cm^2)": null
+    "pressure(Torr)": 300.0
 }
 ```
 
@@ -65,12 +64,35 @@ For a solid target:
     "compound": [
         [6, 12, 1]
     ],
-    "pressure(Torr)": null,
     "thickness(ug/cm^2)": 50.0
 }
 ```
 
-The indication of a `null` pressure or thickness tells spyral-utils if that JSON is for a solid or gas target. Compound specifications are lists of elements where each element is an array of `[Z, A, S]`. `S` is the stoichiometry of that particular element in the compound. spyral-utils does not support target layers at this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the gas target is for <sup>1</sup>H<sub>2</sub> gas at 300 Torr pressure and the solid target is for <sup>12</sup>C<sub>1</sub> foil with a thickness of 50 &mu;g/cm<sup>2</sup>.
+For a gas mixture:
+
+```json
+{
+    "components": [
+        [
+            [6, 12, 1],
+            [1, 1, 4],
+        ],
+        [
+            [18, 40, 1]
+        ]
+    ],
+    "volume_fractions": [0.1, 0.9],
+    "pressure(Torr)": 50.0
+}
+```
+
+Compound specifications are lists of elements where each element is an array of `[Z, A, S]`. `S` is the 
+stoichiometry of that particular element in the compound. spyral-utils does not support target layers at 
+this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the 
+gas target is for <sup>1</sup>H<sub>2</sub> gas at 300 Torr pressure and the solid target is for
+<sup>12</sup>C<sub>1</sub> foil with a thickness of 50 &mu;g/cm<sup>2</sup>. The gas mixutre example is for
+P10 gas (10% methane in argon) at 50 Torr.
+
 
 ### Cut2D
 
@@ -89,7 +111,9 @@ The JSON description of a Cut2D(or 2D-gate) on data is as follows:
 }
 ```
 
-`name` is a identifier given for that particular cut. `verticies` is a list of `[x,y]` coordinates which define the polygon. Note that the polygon must be closed (the final vertex must be the same as the first vertex). You can also add the `xaxis` and `yaxis` keywords to specify the names of the axes of the cut (i.e. the column names of a dataframe).
+`name` is a identifier given for that particular cut. `verticies` is a list of `[x,y]` coordinates which define the polygon. Note
+that the polygon must be closed (the final vertex must be the same as the first vertex). You can also add the `xaxis` and `yaxis`
+keywords to specify the names of the axes of the cut (i.e. the column names of a dataframe).
 
 ```json
 {
@@ -125,7 +149,8 @@ The JSON description of a particle ID gate is as follows:
 }
 ```
 
-The `name` and `vertices` fields are the same as those used by a Cut2D. The particle ID has the additional data `Z` and `A` which are the element and mass number of the associated nucleus. Like in a Cut2D you can also specify the axis names of the cut
+The `name` and `vertices` fields are the same as those used by a Cut2D. The particle ID has the additional data `Z` and `A` which are
+the element and mass number of the associated nucleus. Like in a Cut2D you can also specify the axis names of the cut
 
 ```json
 {
