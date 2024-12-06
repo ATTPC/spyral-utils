@@ -650,7 +650,7 @@ def deserialize_mixture_data(
 
     Parameters
     ----------
-    target_path: Path
+    path: Path
         Path to JSON file containing target data
 
     Returns
