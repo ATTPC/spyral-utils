@@ -1,8 +1,6 @@
 {
-    "id": null,
     "compound": [
         [6, 12, 1]
     ],
-    "pressure(Torr)": null,
     "thickness(ug/cm^2)": 50.0
 }
