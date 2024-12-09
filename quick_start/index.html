@@ -859,8 +859,7 @@
     &quot;compound&quot;: [
         [1, 1, 2]
     ],
-    &quot;pressure(Torr)&quot;: 300.0,
-    &quot;thickness(ug/cm^2)&quot;: null
+    &quot;pressure(Torr)&quot;: 300.0
 }
 </code></pre>
 <p>For a solid target:</p>
@@ -868,11 +867,30 @@
     &quot;compound&quot;: [
         [6, 12, 1]
     ],
-    &quot;pressure(Torr)&quot;: null,
     &quot;thickness(ug/cm^2)&quot;: 50.0
 }
 </code></pre>
-<p>The indication of a <code>null</code> pressure or thickness tells spyral-utils if that JSON is for a solid or gas target. Compound specifications are lists of elements where each element is an array of <code>[Z, A, S]</code>. <code>S</code> is the stoichiometry of that particular element in the compound. spyral-utils does not support target layers at this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the gas target is for <sup>1</sup>H<sub>2</sub> gas at 300 Torr pressure and the solid target is for <sup>12</sup>C<sub>1</sub> foil with a thickness of 50 &mu;g/cm<sup>2</sup>.</p>
+<p>For a gas mixture:</p>
+<pre><code class="language-json">{
+    &quot;components&quot;: [
+        [
+            [6, 12, 1],
+            [1, 1, 4],
+        ],
+        [
+            [18, 40, 1]
+        ]
+    ],
+    &quot;volume_fractions&quot;: [0.1, 0.9],
+    &quot;pressure(Torr)&quot;: 50.0
+}
+</code></pre>
+<p>Compound specifications are lists of elements where each element is an array of <code>[Z, A, S]</code>. <code>S</code> is the 
+stoichiometry of that particular element in the compound. spyral-utils does not support target layers at 
+this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the 
+gas target is for <sup>1</sup>H<sub>2</sub> gas at 300 Torr pressure and the solid target is for
+<sup>12</sup>C<sub>1</sub> foil with a thickness of 50 &mu;g/cm<sup>2</sup>. The gas mixutre example is for
+P10 gas (10% methane in argon) at 50 Torr.</p>
 <h3 id="cut2d">Cut2D</h3>
 <p>The JSON description of a Cut2D(or 2D-gate) on data is as follows:</p>
 <pre><code class="language-json">{
@@ -886,7 +904,9 @@
     ]
 }
 </code></pre>
-<p><code>name</code> is a identifier given for that particular cut. <code>verticies</code> is a list of <code>[x,y]</code> coordinates which define the polygon. Note that the polygon must be closed (the final vertex must be the same as the first vertex). You can also add the <code>xaxis</code> and <code>yaxis</code> keywords to specify the names of the axes of the cut (i.e. the column names of a dataframe).</p>
+<p><code>name</code> is a identifier given for that particular cut. <code>verticies</code> is a list of <code>[x,y]</code> coordinates which define the polygon. Note
+that the polygon must be closed (the final vertex must be the same as the first vertex). You can also add the <code>xaxis</code> and <code>yaxis</code>
+keywords to specify the names of the axes of the cut (i.e. the column names of a dataframe).</p>
 <pre><code class="language-json">{
     &quot;name&quot;: &quot;test_cut&quot;,
     &quot;xaxis&quot;: &quot;my_x&quot;,
@@ -915,7 +935,8 @@
     &quot;A&quot;: 12
 }
 </code></pre>
-<p>The <code>name</code> and <code>vertices</code> fields are the same as those used by a Cut2D. The particle ID has the additional data <code>Z</code> and <code>A</code> which are the element and mass number of the associated nucleus. Like in a Cut2D you can also specify the axis names of the cut</p>
+<p>The <code>name</code> and <code>vertices</code> fields are the same as those used by a Cut2D. The particle ID has the additional data <code>Z</code> and <code>A</code> which are
+the element and mass number of the associated nucleus. Like in a Cut2D you can also specify the axis names of the cut</p>
 <pre><code class="language-json">{
     &quot;name&quot;: &quot;test_cut&quot;,
     &quot;xaxis&quot;: &quot;my_x&quot;,
