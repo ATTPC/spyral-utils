@@ -82,7 +82,7 @@ def deserialize_particle_id(
 
             if pid.nucleus.A == 0:
                 print(
-                    f'Nucleus Z: {json_data["Z"]} A: {json_data["A"]} requested by ParticleID {json_data["name"]} does not exist.'
+                    f"Nucleus Z: {json_data['Z']} A: {json_data['A']} requested by ParticleID {json_data['name']} does not exist."
                 )
                 return None
 

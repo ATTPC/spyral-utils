@@ -498,8 +498,8 @@ class GasMixtureTarget:
         self.pretty_string: str = "(GasMix)"
         self.ugly_string: str = "(GasMix)"
         for fraction, component in zip(self.volume_fractions, self.components):
-            self.pretty_string += f"[{fraction*100.0:.0}%-"
-            self.ugly_string += f"[{fraction*100.0:.0}%-"
+            self.pretty_string += f"[{fraction * 100.0:.0}%-"
+            self.ugly_string += f"[{fraction * 100.0:.0}%-"
             for z, a, s in component:
                 self.pretty_string += (
                     f"{nuclear_map.get_data(z, a).pretty_iso_symbol}<sub>{s}</sub>"

@@ -135,8 +135,8 @@ class NuclearDataMap:
                 data.element_symbol = entries[2]  # Column 3: Element
                 data.atomic_mass = float(entries[3])
                 data.mass = (
-                    float(entries[3]) - float(data.Z) * ELECTRON_MASS_U
-                ) * AMU_2_MEV  # Remove electron masses to obtain nuclear masses, Column 4
+                    (float(entries[3]) - float(data.Z) * ELECTRON_MASS_U) * AMU_2_MEV
+                )  # Remove electron masses to obtain nuclear masses, Column 4
                 data.isotopic_symbol = f"{data.A}{entries[2]}"
                 data.pretty_iso_symbol = f"<sup>{data.A}</sup>{entries[2]}"
                 self.map[generate_nucleus_id(data.Z, data.A)] = data

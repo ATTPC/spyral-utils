@@ -1,12 +1,12 @@
-name: pytest
-run-name: ${{ github.actor }} running pytest
+name: CI 
+run-name: ${{ github.actor }} running CI 
 on:
   push:
     branches:
       - '*'
       - '!gh-pages'
 jobs:
-    test-spyral-utils:
+    test:
         runs-on: ${{ matrix.os }}
         strategy:
             matrix:
@@ -20,7 +20,26 @@ jobs:
                 python-version: ${{ matrix.python-version }}
             - name: Install dependencies
               run: |
-                pdm sync -d -G test
+                pdm sync -d
             - name: Run tests
               run: |
                 pdm run -v pytest tests
+
+    check:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - name: Setup PDM
+          uses: pdm-project/setup-pdm@v4
+          with:
+            python-version: '3.12'
+        - name: Install deps
+          run: |
+            pdm sync -d
+        - name: Lint code 
+          run: |
+            pdm run ruff check 
+        - name: Check formatting
+          run: |
+            pdm run ruff format --check 
+

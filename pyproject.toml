@@ -22,9 +22,12 @@ license = {text = "GPLv3"}
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
 
-[tool.pdm.dev-dependencies]
-test = [
+[dependency-groups]
+dev = [
+    "ruff>=0.9.2",
     "pytest>=7.4.3",
+]
+docs = [
     "mkdocs>=1.5.3",
     "mkdocs-material>=9.4.14",
     "mkdocstrings>=0.24.0",
