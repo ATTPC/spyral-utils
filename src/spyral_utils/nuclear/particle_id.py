@@ -43,7 +43,7 @@ def deserialize_particle_id(
 
     Parameters
     ----------
-    cut_path: Path
+    path: Path
         The path to a JSON file containing a ParticleID
     nuclear_map: NuclearDataMap
         An instance of a spyral_utils.nuclear.NuclearDataMap
