@@ -206,7 +206,7 @@ class Cut2D:
         list[bool]
             List of results of checking each point
         """
-        return [contains_xy(self.polygon, point) for point in points]
+        return [contains_xy(self.polygon, point) for point in points]  # type: ignore
 
     def is_cols_inside(self, columns: Series) -> Series:
         """Which of the points in this Series are in the cut
@@ -228,7 +228,7 @@ class Cut2D:
             [bool(contains_xy(self.polygon, x=point[0], y=point[1])) for point in data]
         )
 
-    def get_vertices(self) -> np.ndarray:
+    def get_vertices(self) -> list[tuple[float, float]]:
         """Get the cut vertices
 
         Returns
@@ -237,7 +237,7 @@ class Cut2D:
             the vertices
 
         """
-        return tuple(self.polygon.exterior.coords)
+        return tuple(self.polygon.exterior.coords)  # type: ignore
 
     def get_x_axis(self) -> str:
         """Get the name of the cut data x-axis

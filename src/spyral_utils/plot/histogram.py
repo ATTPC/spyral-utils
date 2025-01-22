@@ -216,7 +216,7 @@ class Hist2D:
         clamped_y_range = clamp_range(yrange, (self.y_bins.min(), self.y_bins.max()))
         bin_min = self.get_bin((clamped_x_range[0], clamped_y_range[0]))
         bin_max = self.get_bin((clamped_x_range[1], clamped_y_range[1]))
-        if bin_min == None or bin_max == None:
+        if bin_min is None or bin_max is None:
             return None
 
         x_bin_range = np.arange(start=bin_min[0], stop=bin_max[0], step=1)
@@ -406,7 +406,9 @@ class Histogrammer:
         if type(hist) is not Hist2D:
             return False
         counts, _, _ = np.histogram2d(
-            x_data.flatten(), y_data.flatten(), bins=(hist.x_bins, hist.y_bins)  # type: ignore
+            x_data.flatten(),
+            y_data.flatten(),
+            bins=(hist.x_bins, hist.y_bins),  # type: ignore
         )
         hist.counts += counts.T
         return True

@@ -1,4 +1,4 @@
-from spyral_utils.plot import Cut2D, deserialize_cut, CutHandler
+from spyral_utils.plot import Cut2D, deserialize_cut
 from pathlib import Path
 import polars as pl
 
@@ -8,7 +8,6 @@ CUT_NOAXIS_JSON_PATH: Path = Path(__file__).parent.resolve() / "cut_noaxis.json"
 
 def test_cut():
     cut = deserialize_cut(CUT_JSON_PATH)
-    handler = CutHandler()
     df = pl.DataFrame({"x": [0.4, 0.2], "y": [0.4, 0.2]})
 
     assert isinstance(cut, Cut2D)
@@ -23,7 +22,6 @@ def test_cut():
 
 def test_cut_noaxis():
     cut = deserialize_cut(CUT_NOAXIS_JSON_PATH)
-    handler = CutHandler()
     df = pl.DataFrame({"x": [0.4, 0.2], "y": [0.4, 0.2]})
 
     assert isinstance(cut, Cut2D)
