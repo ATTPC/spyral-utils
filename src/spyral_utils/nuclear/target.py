@@ -6,19 +6,15 @@ Classes should never be directly instantiated, rather use the load_target functi
 
 Classes
 -------
-TargetData
-    Raw target dataclass, should never be instantiated directly by user
 GasTarget
     AT-TPC representation of a gas target
 SolidTarget
-    AT-TPC representation of a gas target
+    AT-TPC representation of a solid target
+GasMixtureTarget
+    AT-TPC representation of a gas mixture target
 
 Functions
 ---------
-deserialize_target_data(target_path: Path, nuclear_map: NuclearDataMap) -> TargetData | None
-    Deserialize raw target data from JSON. Should never be used directly.
-serialize_target_data(target_path: Path, target_data: TargetData)
-    Serialize raw target data to JSON. Should never be used directly.
 load_target(target_path: Path, nuclear_map: NuclearDataMap) -> GasTarget | SolidTarget | None
     Load a target from JSON. This is what should be used to load a target.
 save_target(target_path: Path, target: GasTarget | SolidTarget)
@@ -44,10 +40,21 @@ class GasTarget:
     Gas target for which energy loss can be calculated using pycatima. Can perform several types of
     energy loss calculations (straggling, dEdx, energy lost, etc.)
 
+    Parameters
+    ----------
+    compound: list[tuple[int, int, int]]
+        A list specifiying elements in the target compound as (Z, A, S)
+    pressure: float
+        The gas pressure in Torr
+    nuclear_data: NuclearDataMap
+        The nucleus data
+
     Attributes
     ----------
-    data: TargetData
-        The raw target data from a JSON file
+    compound: list[tuple[int, int, int]]
+        A list specifiying elements in the target compound as (Z, A, S)
+    pressure: float
+        The gas pressure in Torr
     ugly_string: str
         A string representation without rich formatting
     pretty_string: str
@@ -268,15 +275,26 @@ def serialize_gas_target_data(target_path: Path, data: GasTarget) -> None:
 
 
 class SolidTarget:
-    """An AT-TPC gas target
+    """An AT-TPC solid target
 
-    Gas target for which energy loss can be calculated using pycatima. Can perform several types of
+    Solid target for which energy loss can be calculated using pycatima. Can perform several types of
     energy loss calculations (straggling, dEdx, energy lost, etc.)
+
+    Parameters
+    ----------
+    compound: list[tuple[int, int, int]]
+        A list specifiying elements in the target compound as (Z, A, S)
+    thickness: float
+        The target thickness in ug/cm^2
+    nuclear_data: NuclearDataMap
+        The nucleus data
 
     Attributes
     ----------
-    data: TargetData
-        The raw target data from a JSON file
+    compound: list[tuple[int, int, int]]
+        A list specifiying elements in the target compound as (Z, A, S)
+    thickness: float
+        The target thickness in ug/cm^2
     ugly_string: str
         A string representation without rich formatting
     pretty_string: str
@@ -290,8 +308,8 @@ class SolidTarget:
         get the stopping power (dEdx) for a projectile in this target
     get_angular_straggling(projectile_data: NucleusData, projectile_energy: float) -> float:
         get the angular straggling for a projectile in this target
-    get_energy_loss(projectile_data: NucleusData, projectile_energy: float, distances: ndarray) -> ndarray:
-        get the energy loss values for a projectile travelling distances through the target
+    get_energy_loss(projectile_data: NucleusData, projectile_energy: float, angles: ndarray) -> ndarray:
+        get the energy loss values for a projectile travelling at angles through the target
     """
 
     UG2G: float = 1.0e-6  # convert ug to g
@@ -489,6 +507,48 @@ class GasMixtureTarget:
         pressure: float,
         nuclear_map: NuclearDataMap,
     ):
+        """An AT-TPC gas mixutre target
+
+        Gas mixture target for which energy loss can be calculated using pycatima. Can perform several types of
+        energy loss calculations (straggling, dEdx, energy lost, etc.)
+
+        Parameters
+        ----------
+        components: list[list[tuple[int, int, int]]]
+            A list specifiying compound elements in the target compound as (Z, A, S)
+        volume_fractions: list[float]
+            A list of mixture fractions by volume (in same order as components)
+        pressure: float
+            The gas pressure in Torr
+        nuclear_data: NuclearDataMap
+            The nucleus data
+
+        Attributes
+        ----------
+        components: list[list[tuple[int, int, int]]]
+            A list specifiying compound elements in the target compound as (Z, A, S)
+        volume_fractions: list[float]
+            A list of mixture fractions by volume (in same order as components)
+        pressure: float
+            The gas pressure in Torr
+        ugly_string: str
+            A string representation without rich formatting
+        pretty_string: str
+            A string representation with rich formatting
+        material: catima.Material
+            The catima representation of the target
+        density: float
+            The target density in g/cm^3
+
+        Methods
+        -------
+        get_dedx(projectile_data: NucleusData, projectile_energy: float) -> float
+            get the stopping power (dEdx) for a projectile in this target
+        get_angular_straggling(projectile_data: NucleusData, projectile_energy: float) -> float:
+            get the angular straggling for a projectile in this target
+        get_energy_loss(projectile_data: NucleusData, projectile_energy: float, distances: ndarray) -> ndarray:
+            get the energy loss values for a projectile travelling distances through the target
+        """
         self.components = components
         self.volume_fractions = volume_fractions
         self.pressure = pressure
