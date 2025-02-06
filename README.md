@@ -1,6 +1,6 @@
 # spyral-utils
 
-![testing workflow](https://github.com/ATTPC/spyral-utils/actions/workflows/test-actions.yml/badge.svg)
+![CI](https://github.com/ATTPC/spyral-utils/actions/workflows/ci.yml/badge.svg)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/spyral-utils.svg)](https://pypi.python.org/pypi/spyral-utils/)
 [![PyPI license](https://img.shields.io/pypi/l/spyral-utils.svg)](https://pypi.python.org/pypi/spyral-utils/)
 
