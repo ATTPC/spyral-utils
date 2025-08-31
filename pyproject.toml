@@ -1,10 +1,11 @@
 [project]
 name = "spyral-utils"
-version = "2.0.0"
+version = "2.1.0"
 description = "A collection of useful utilities for the Spyral analysis framework"
 authors = [
     {name = "Gordon McCann", email = "mccann@frib.msu.edu"},
     {name = "Nathan Turi", email = "turi@frib.msu.edu"},
+    {name = "Daniel Bazin", email = "bazin@frib.msu.edu"},
 ]
 dependencies = [
     "numpy>=2.0, <2.2",
@@ -13,14 +14,16 @@ dependencies = [
     "pycatima>=1.90",
     "shapely>=2.0.6",
     "vector>=1.3.0",
+    "pybind11>=3.0.0",
 ]
 requires-python = ">=3.10,<3.14"
 readme = "README.md"
 license = {text = "GPLv3"}
 
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["pdm-backend", "scikit-build-core", "pybind11"]
+# build-backend = "pdm.backend"
+build-backend = "scikit_build_core.build"
 
 [dependency-groups]
 dev = [

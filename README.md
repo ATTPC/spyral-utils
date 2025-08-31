@@ -10,6 +10,7 @@ spyral-utils is a utility library that contains some of the  core functionality 
 - Some histogramming and gating/cuting tools that are plotting backend agnostic
 - Energy loss analysis for gas and solid targets using pycatima
 - 4-vector analysis through the vector package
+- Point triplet clustering algorithm (also called tripclust or Dalitz clustering)
 
 See the [documentation](https://attpc.github.io/spyral-utils/) for more details.
 
@@ -69,9 +70,9 @@ For a gas mixture:
 }
 ```
 
-Compound specifications are lists of elements where each element is an array of `[Z, A, S]`. `S` is the 
-stoichiometry of that particular element in the compound. spyral-utils does not support target layers at 
-this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the 
+Compound specifications are lists of elements where each element is an array of `[Z, A, S]`. `S` is the
+stoichiometry of that particular element in the compound. spyral-utils does not support target layers at
+this time (but layered targets can be built from the building blocks provided by spyral-utils). In the above examples the
 gas target is for <sup>1</sup>H<sub>2</sub> gas at 300 Torr pressure and the solid target is for
 <sup>12</sup>C<sub>1</sub> foil with a thickness of 50 &mu;g/cm<sup>2</sup>. The gas mixutre example is for
 P10 gas (10% methane in argon) at 50 Torr.
@@ -172,3 +173,4 @@ For testing we use
 
 - Gordon McCann
 - Nathan Turi
+- Daniel Bazin
