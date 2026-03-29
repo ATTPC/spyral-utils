@@ -3,9 +3,11 @@
 Classes
 -------
 CutHandler
-    Handler to recieve vertices from a matplotlib or plotly selection event.
+    Handler to receive vertices from a matplotlib or plotly selection event.
 Cut2D
     Implementation of 2D cuts/gates/selections as used in many types of graphical analyses
+MultiPolygonSelector 
+    Allows handling multiple polygons in the CutHandler using the same plot. 
 
 Functions
 ---------
@@ -21,6 +23,7 @@ import numpy as np
 import json
 from pathlib import Path
 from typing import Any
+from matplotlib.widgets import PolygonSelector
 
 DEFAULT_CUT_AXIS = "DefaultAxis"
 
@@ -376,3 +379,76 @@ def deserialize_cut(filepath: Path) -> Cut2D | None:
             f"An error occurred reading trying to read a cut from file {filepath}: {error}"
         )
         return None
+
+class MultiPolygonSelector: 
+    """ Class for drawing multiple gates in a matplotlib plot. 
+    
+    How do use it: -------------------------------------------------
+    from spyral_utils.plot import CutHandler, MultiPolygonSelector, Cut2D, serialize_cut
+
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(1,1)
+    handler = CutHandler()
+    _ = MultiPolygonSelector(ax, handler)
+
+    # if the user press "x", a new polygon will be created.
+    # With "q", the user can quit selecting polygons and move into the next cell.
+    ----------------------------------------------------------------
+
+    Attributes: 
+    -----------
+    init_no_cuts: 
+        Number of Cuts stored in the CutHandler()
+    
+    ax: 
+        axes from where the polygon will be cut 
+    
+    text: 
+        Updates the information displayed in the figure
+    
+    handler: 
+        Handler 
+
+    polygons: 
+        Stores in a list the information of the new polygons created, the information is stored for awareness of how many gate were created. 
+    
+    current_polygon:
+        Polygon Selector of the current event 
+    
+    cid_ket: 
+        Initiates the new canvas with the user click in the specified key. 
+
+    Methods:
+    ----------
+    on_select()
+        Selects and stores the information of the new polygon in two areas: polygons and handler. 
+    
+    on_key_press()
+        When the user types "x" or "q" the canvas will either allow you to create a new polygon or finish creating polygons. 
+    
+    """
+    def __init__(self, ax, handler):
+        self.init_no_cuts = len(handler.cuts)
+        self.ax = ax 
+        self.text = self.ax.text(0.05, 2.7, f"-x- to draw new cut\n-q- to exit\nInit. No. Cuts:{len(handler.cuts)}")
+        self.handler = handler
+        self.polygons = []
+        self.current_polygon = PolygonSelector(self.ax, self.handler.mpl_on_select)
+        self.cid_ket = self.current_polygon.canvas.mpl_connect('key_press_event',self.on_key_press)
+        # Add text about key elements 
+        
+    def on_select(self):
+        """Select the polygon"""
+        _ = PolygonSelector(self.ax, self.handler.mpl_on_select)
+        self.polygons.append(_)
+    def on_key_press(self, event): 
+        """Next event"""
+        if event.key == 'x':
+            number_polygons = len(self.polygons)
+            self.text.set_text(f"-x- to draw new cut\n-q- to exit\nInit. No. Cuts:{self.init_no_cuts} New Cuts: {number_polygons}")
+            self.current_polygon.disconnect_events()
+            self.on_select()
+            # self.current_polygon = PolygonSelector(self.ax, self.handler.mpl_on_select)
+        elif event.key == 'q':
+            self.current_polygon.ax.clear
